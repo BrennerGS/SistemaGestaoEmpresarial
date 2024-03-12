@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Template</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+
+  <!-- Include Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+
+
+  <style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: "Open Sans", sans-serif;
+      height: 100%;
+      /* Permite que o corpo da página ocupe 100% da altura da viewport */
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1;
+      /* Faz com que o conteúdo preencha o espaço disponível restante */
+      margin-top: 90px !important;
+    }
+
+    .navbar {
+      background-color: #333;
+      /* Cor de fundo do navbar ajustada */
+    }
+
+    .footer {
+      background-color: #f8f9fa;
+      /* Cor de fundo do footer ajustada */
+    }
+
+
+    /* ------------------------------------ inputs e icones nos inputs */
+    /* Style the input container */
+    .input-container {
+      display: flex;
+      width: 100%;
+      margin-bottom: 15px;
+
+    }
+
+    /* Style the form icons */
+    .icon {
+      padding: 10px;
+      background: #DDDDDD;
+      color: #000320;
+      min-width: 50px;
+      text-align: center;
+      border-bottom-left-radius: 10px;
+      border-top-left-radius: 10px;
+    }
+
+    /* Style the input fields */
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      outline: none;
+      border-bottom-left-radius: 0px;
+      border-top-left-radius: 0px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px;
+      outline: none;
+      border: 2px #DDDDDD solid;
+      border-bottom-left-radius: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+
+
+    .input-field:focus {
+      border: 2px solid dodgerblue;
+    }
+
+    input:focus {
+      border: 2px solid dodgerblue;
+    }
+
+    /* Set a style for the submit button */
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-sm text-light navbar-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'dashboard' %}"><i class="fa fa-home"></i> Logo</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar"
+        aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="myNavbar" style="color: white!important;">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="CadastrosNotificationsDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe"></i> Cadastros</a>
+            <ul class="dropdown-menu" aria-labelledby="CadastrosNotificationsDropdown">
+              <li><a class="dropdown-item" href="#">One new friend request</a></li>
+              <li><a class="dropdown-item" href="#">John Doe posted on your wall</a></li>
+              <li><a class="dropdown-item" href="#">Jane likes your post</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="SuprementosNotificationsDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-user"></i> Suprementos</a>
+            <ul class="dropdown-menu" aria-labelledby="SuprementosNotificationsDropdown">
+              <li><a class="dropdown-item" href="#">One new friend request</a></li>
+              <li><a class="dropdown-item" href="#">John Doe posted on your wall</a></li>
+              <li><a class="dropdown-item" href="#">Jane likes your post</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="VendasNotificationsDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i> Vendas</a>
+            <ul class="dropdown-menu" aria-labelledby="VendasNotificationsDropdown">
+              <li><a class="dropdown-item" href="#">One new friend request</a></li>
+              <li><a class="dropdown-item" href="#">John Doe posted on your wall</a></li>
+              <li><a class="dropdown-item" href="#">Jane likes your post</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span
+                class="badge bg-success">3</span></a>
+            <ul class="dropdown-menu" aria-labelledby="notificationsDropdown">
+              <li><a class="dropdown-item" href="#">One new friend request</a></li>
+              <li><a class="dropdown-item" href="#">John Doe posted on your wall</a></li>
+              <li><a class="dropdown-item" href="#">Jane likes your post</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <a href="#"><img src="https://www.w3schools.com/w3images/avatar2.png" class="img-fluid rounded-circle"
+          style="height:23px;width:23px" alt="Avatar"></a>
+    </div>
+  </nav>
+
+  <!-- Page Container -->
+  <div class="container mt-5 content">
+    
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+      <!-- <strong>{% if message.tags %}alert-{{ message.tags }}{% endif %}</strong> -->
+      {{ message }}
+      
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    
+
+    {% block content %}
+
+    {% endblock %}
+  </div>
+
+
+
+  <!-- Footer -->
+  <footer class="container-fluid text-center footer">
+    <h5>Footer</h5>
+  </footer>
+
+  <footer class="container-fluid text-center footer">
+    <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">minhaempresa.com</a></p>
+  </footer>
+
+
+  <!-- Include jQuery (required by Select2) -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <!-- Include Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>

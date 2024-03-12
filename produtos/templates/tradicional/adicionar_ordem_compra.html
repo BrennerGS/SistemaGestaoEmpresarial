@@ -1,0 +1,12 @@
+<!-- adicionar_ordem_compra.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="mt-4 mb-4">Adicionar Ordem de Compra</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ ordem_compra_form.as_p }}
+    {{ item_formset.as_p }}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+  </form>
+{% endblock %}

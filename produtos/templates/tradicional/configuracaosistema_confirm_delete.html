@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Confirmar Exclusão da Configuração do Sistema</h2>
+  <p>Tem certeza de que deseja excluir "{{ configuracao_sistema.informacoes_contato }}"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Exclusão</button>
+  </form>
+
+  <a href="{% url 'configuracao_sistema_list' %}">Cancelar</a>
+</div>
+{% endblock %}

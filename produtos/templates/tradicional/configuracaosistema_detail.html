@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Detalhes da Configuração do Sistema</h2>
+  <p><strong>Informações de Contato:</strong> {{ configuracoes_sistema.informacoes_contato }}</p>
+  <p><strong>Termos de Uso:</strong> {{ configuracoes_sistema.termos_de_uso }}</p>
+  <p><strong>Políticas de Privacidade:</strong> {{ configuracoes_sistema.politicas_privacidade }}</p>
+
+  <a href="{% url 'configuracao_sistema_list' %}">Voltar para a Lista</a>
+</div>
+{% endblock %}

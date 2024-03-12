@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Dashboard</h1>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card  border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Funcionários</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'Funcionario_list' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'Funcionario_create' %}" class="btn btn-light">Criar Funcionario</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card  border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Fornecedores</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'Fornecedor_list' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'Fornecedor_create' %}" class="btn btn-light">Criar Fornecedor</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card  border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Clientes</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'Cliente_list' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'Cliente_create' %}" class="btn btn-light">Criar Cliente</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card  border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Produtos</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'lista_produtos' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'produto_create' %}" class="btn btn-light">Criar produto</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card  border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Ordens de Compras</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'ordem_compra_list' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'adicionar_ordem_compra' %}" class="btn btn-light">Criar ordens de vendas</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Ordens de Vendas</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'ordem_venda_list' %}" class="btn btn-light">Ver lista</a></p>
+                    <p class="card-text"><a href="{% url 'adicionar_ordem_venda' %}" class="btn btn-light">Criar ordens de vendas</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="card border-dark mb-4">
+                <div class="card-header bg-while text-dark">
+                    <h3>Configuração sistema</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><a href="{% url 'configuracao_sistema_list' %}" class="btn btn-light">Ver</a></p>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+{% endblock %}

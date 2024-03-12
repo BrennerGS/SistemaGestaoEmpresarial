@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Lista de Configurações do Sistema</h2>
+    <table>
+        <ul>
+            {% for configuracao_sistema in configuracoes_sistema %}
+            <li>
+                <a href="{% url 'configuracao_sistema_detail' pk=configuracao_sistema.pk %}">
+                    {{ configuracao_sistema.informacoes_contato }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </table>
+    <a href="{% url 'configuracao_sistema_create' %}">Nova Configuração do Sistema</a>
+</div>
+{% endblock %}
