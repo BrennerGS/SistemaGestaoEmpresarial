@@ -1,60 +1,150 @@
-{% extends 'base.html' %}
+{% extends 'base_teste.html' %}
 
 {% block content %}
 {% load custom_filters %}
 
-<div class="container">
-    <h2 class="text-center">Lista de {{ model_name }}</h2>
-    {% if ActionAdd %}
-    <div class="text-right mb-3">
-        <a href="{% url ActionAdd.url_name %}" class="btn btn-{{ ActionAdd.cor }}"><i class="{{ ActionAdd.icon }}"></i> {{ ActionAdd.label }}</a>
-    </div>
-    {% endif %}
+{% if messages %}
+          {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            <!-- <strong>{% if message.tags %}alert-{{ message.tags }}{% endif %}</strong> -->
+            {{ message }}
+
+          </div>
+          {% endfor %}
+          {% endif %}
+    
     {% if object_list %}
-    <div id="lista" style="display: block;">
+    <div class="card">
+        <div class="card-header">
+            
+            {% if ActionAdd %}
+            <div class="card-title">
+                <a class="btn" href="{% url ActionAdd.url_name %}" title=" {{ ActionAdd.label }}">
+                    <i class="{{ ActionAdd.icon }}"></i>
+                </a>
+                <select class="btn" onchange="window.location.href = '?list=' + this.value">
+                    <option>Quantidade por pagina</option>
+                    <option value="1">1 por pagina</option>
+                    <option value="10">10 por pagina</option>
+                    <option value="20">20 por pagina</option>
+                    <option value="40">40 por pagina</option>
+                    <option value="60">60 por pagina</option>
+                    <option value="80">80 por pagina</option>
+                    <option value="100">100 por pagina</option>
+                </select>
+            </div>
+            {% endif %}
+
+            
+          <div class="card-tools">
+            
+            <ul class="pagination pagination-sm float-right">
+                {% if object_list.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo;&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+              
+                {% for num in object_list.paginator.page_range %}
+                    {% if object_list.number == num %}
+                        <li class="page-item"><a class="page-link" href="#"><strong>{{ num }}</strong></a></li>
+                    {% elif num > object_list.number|add:'-5' and num < object_list.number|add:'5' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    
+                {% endfor %}
+              
+                {% if object_list.has_next %}
+                
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.next_page_number }}">&raquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.paginator.num_pages }}">&raquo;&raquo;</a></li>
+                {% endif %}
+            </ul>
+          </div>
+
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0" style="overflow-x:auto;">
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     {% for field in column_titles %}
+                    {% if field == 'descricao' %}
+                    
+                    {% else %}
                     <th>{{ field }}</th>
+                    {% endif %}
                     {% endfor %}
-                    <th>Ações</th>
+                    <th colspan="2">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 {% for object in object_list %}
+
+
                 <tr>
                     {% for column_title in column_titles %}
+                    {% if column_title == 'descricao' %}
+
+                    {% else %}
                     <td>
                         {% if column_title == 'imagem' %}
                         <img src="/media/{{ object|get_attribute:column_title }}" width="50" alt="Imagem do produto">
                         {% else %}
-                        {{ object|get_attribute:column_title|truncatewords:5 }}
+                        {{ object|get_attribute:column_title|truncatewords:50 }}
                         {% endif %}
                     </td>
+                    {% endif %}
                     {% endfor %}
+
+                    {% for action in list_actions %}
+                    {% if action %}
                     <td>
-                        {% for action in list_actions %}
-                        {% if action %}
-                        <a href="{% url action.url_name object.id %}" class="btn btn-{{action.cor}}">
+                        <a href="{% url action.url_name object.id %}" title="{{action.label}}">
                             {% if action.icon %}
                             <i class="{{action.icon}}"></i>
                             {% endif %}
-                            {{action.label}}
                         </a>
-                        {% endif %}
-                        {% endfor %}
                     </td>
+                    {% endif %}
+                    {% endfor %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+
+        <div class="card-footer clearfix">
+            <ul class="pagination pagination-sm m-0 float-right">
+                {% if object_list.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo;&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+              
+                {% for num in object_list.paginator.page_range %}
+                    {% if object_list.number == num %}
+                        <li class="page-item"><a class="page-link" href="#"><strong>{{ num }}</strong></a></li>
+                    {% elif num > object_list.number|add:'-5' and num < object_list.number|add:'5' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                    
+                {% endfor %}
+              
+                {% if object_list.has_next %}
+                
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.next_page_number }}">&raquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ object_list.paginator.num_pages }}">&raquo;&raquo;</a></li>
+                {% endif %}
+            </ul>
+          </div>
+          
+        
+
     {% else %}
     <hr>
     <p style="text-align: center;">Nenhum registro encontrado.</p>
     <hr>
     {% endif %}
-</div>
+
 
 {% endblock %}

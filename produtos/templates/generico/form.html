@@ -1,195 +1,54 @@
-{% extends 'base.html' %}
+{% extends 'base_teste.html' %}
 
 {% block content %}
 {% load custom_filters %}
 
+<style>
+    .form-group {
+        display: inline-block;
+        width: 30%;
+        /* Define a largura de cada campo */
+        margin-right: 2%;
+        /* Adiciona um espaço entre os campos */
+    }
+</style>
 
-
-<div style="margin-bottom: 90px;">
-    <h2 class="text-center">{{ model_name }}</h2>
-    <form method="post" style="width: 70%; margin-left: 15%; margin-right: 15%;" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        {% for field in form %}
-        <div class="form-group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {% for action in a.fieldName %}
-            {% if field.name == action.name %}
-            {% if action %}
-            <a class="btn btn-outline-secondary" style="margin: 5px;" {% if not action.formGen %}
-                onclick="myFunction('{% url action.url_name %}');" {% else %} data-bs-toggle="offcanvas"
-                data-bs-target="#OpenModal{{ action.id }}" {% endif %}>
-                {{ action.label }}
-            </a>
+<!-- jquery validation -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ model_name }}</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form id="quickForm">
+        <div class="card-body">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if field.widget.input_type != 'checkbox' %}
+                {{ field }}
+                <script>
+                    document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
+                </script>
+                {% else %}
+                {{ field }}
+                {% endif %}
+            </div>
+            {% if field.label == 'Imagem' %}
+        </div>
+        <div class="card-body">
             {% endif %}
+            {% if forloop.counter|divisibleby:3 and field.label != 'Descricao' %}
+            <!-- Fecha a linha a cada 3 campos, exceto para o campo de descrição -->
+        </div>
+        <div class="card-body">
             {% endif %}
             {% endfor %}
-            {% if field.widget.input_type != 'checkbox' %}
-            {{ field }}
-            <script>
-                document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
-            </script>
-            {% else %}
-            {{ field }}
-            {% endif %}
         </div>
-        {% endfor %}
-
-        {% if item_formset %}
-        <div id="itemsTableContainer">
-            <table id="itemsTable">
-                <thead>
-                    <tr>
-                        <th>PRODUTO</th>
-                        <th>QUANTIDADE</th>
-                        <th>PRECO UNITARIO</th>
-                        <th>TOTAL</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    {{ item_formset.management_form }}
-                    
-                    {% for item in item_formset %}
-
-                    
-
-                    <tr>
-                        <td>
-                            <select class="product-select"
-                                name="itemordemcompra_set-{{ forloop.counter0 }}-produto" id="productSelect"
-                                onchange="updatePrices(this)">
-                                {% for ItensForm in ItensForms %}
-                                <option value="{{ ItensForm.id }}" data-price="{{ ItensForm.preco }}">{{ ItensForm.nome}}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <input type="number" class="quantity-input" name="itemordemcompra_set-{{ forloop.counter0 }}-quantidade" oninput="updateAllPrices()" value="1" min="1">
-                        </td>
-                        <td>
-                            <div class="input-container">
-                                <i class="fa fa-money icon"></i>
-                            <input type="text" class="input-field unit-price-input "
-                                name="itemordemcompra_set-{{ forloop.counter0 }}-preco_unitario"
-                                onfocus="updateAllPrices()" value="">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="input-container">
-                                <i class="fa fa-money icon"></i>
-                                <input type="text" class="input-field total-input form-control" value="" disabled>
-                            </div>
-                        </td>
-                        <td>
-                            <label for="id_itemordemcompra_set-{{ forloop.counter0 }}-DELETE">Delete:</label>
-
-
-
-                            <input type="checkbox" name="itemordemcompra_set-{{ forloop.counter0 }}-DELETE"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-DELETE">
-
-                            <input type="hidden" name="itemordemcompra_set-{{ forloop.counter0 }}-id"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-id">
-                            <input type="hidden" name="itemordemcompra_set-{{ forloop.counter0 }}-ordem_compra"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-ordem_compra">
-
-
-                                <a href="{% url 'adicionar_ordem_compraExtra' ExtraDeclement %}" value="+ Add">remove</a>
-                        </td>
-                    </tr>
-
-
-
-                    {% endfor %}
-
-
-                    
-
-
-
-                </tbody>
-            </table>
-            
-            <a href="{% url 'adicionar_ordem_compraExtra' ExtraInclement %}" value="+ Add">+ Add another Item Ordem de Compra</a>
-            
-        </div>
-
-        <script>
-            function updateFormsetFields() {
-                // Obter os campos do formset
-                var totalFormsInput = document.getElementById("itemordemcompra_set-TOTAL_FORMS");
-                var initialFormsInput = document.getElementById("itemordemcompra_set-INITIAL_FORMS");
-                var minNumFormsInput = document.getElementById("itemordemcompra_set-MIN_NUM_FORMS");
-                var maxNumFormsInput = document.getElementById("itemordemcompra_set-MAX_NUM_FORMS");
-
-                // Atualizar os valores dos campos
-                var totalForms = document.querySelectorAll('.quantity-input').length;
-                totalFormsInput.value = totalForms;
-                initialFormsInput.value = "0";  // Inicialmente, todos são novos
-                minNumFormsInput.value = "0";  // Mínimo de forms permitidos
-                maxNumFormsInput.value = "1000";  // Máximo de forms permitidos
-            }
-
-            window.addEventListener('load', updateFormsetFields);
-            function removeRow(button) {
-                var row = button.parentNode.parentNode;
-                row.parentNode.removeChild(row);
-                updateAllPrices();
-                updateAllPricess();
-            }
-
-            function updatePrices(select, rowIndex) {
-                var row = select.parentNode.parentNode;
-                var quantity = row.querySelector(".quantity-input").value;
-                var unitPrice = select.options[select.selectedIndex].getAttribute("data-price");
-                var total = quantity * unitPrice;
-
-
-                row.querySelector(".total-input").value = total.toFixed(2);
-
-                row.querySelector(".unit-price-input").value = unitPrice;
-                row.querySelector(".total-input").value = 'R$' + total.toFixed(2);
-                updateAllPricess();
-            }
-
-            // Add this function to update prices for all rows on page load
-            function updateAllPrices() {
-                var selects = document.querySelectorAll(".product-select");
-                selects.forEach(function (select, index) {
-                    updatePrices(select, index);
-                });
-                updateAllPricess();
-            }
-
-            // Call the updateAllPrices function when the page loads
-
-
-            function updateAllPricess() {
-                var selects = document.querySelectorAll(".product-select");
-                var total = 0;
-
-                selects.forEach(function (select) {
-                    var row = select.parentNode.parentNode;
-                    var quantity = row.querySelector(".quantity-input").value;
-                    var unitPrice = parseFloat(select.options[select.selectedIndex].getAttribute("data-price"));
-                    var rowTotal = quantity * unitPrice;
-                    total += rowTotal;
-                });
-
-                document.getElementById("id_total").value = total.toFixed(2);
-            }
-            window.addEventListener('load', updateAllPrices)
-            window.addEventListener('load', updateAllPricess);
-        </script>
-
-        {% endif %}
-        <br>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <a href="{% url ActionCancel %}" class="btn btn-success">Voltar</a>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
 </div>

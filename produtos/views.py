@@ -3,12 +3,26 @@ import logging.config
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from produtos.forms import *
+from .forms import *
 from django.forms import formset_factory
-from produtos.models import *
+from .models import *
 from .utils import *
 from .fields import *
+from django.core.paginator import Paginator
+from django.core.cache import cache
 
+Qtd = 10
+
+
+def set_list_value_in_cache(list):
+    # Verifica se o valor 'list' está na URL e o define no cache
+    list_value = list
+    if list_value:
+        cache.set('list_value', list_value, timeout=300)  # O timeout é em segundos
+
+def get_list_value_from_cache():
+    # Obtém o valor de 'list' do cache, se não estiver disponível, usa um valor padrão
+    return cache.get('list_value', '20')
 
 
 def api_request_GET(request):
@@ -79,12 +93,27 @@ def api_request_DELETE(request):
 
 def dashboard(request):
     
-    return render(request, 'dashboard.html')
+    return render(request, 'index_teste.html')
 
 def produto_list(request):
+
+    if request.GET.get("list") and request.GET.get("list").isdigit():
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('lista_produtos')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Produto.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
-        'model_name': 'Produto',
-        'object_list': Produto.objects.all(),
+        'model_name': 'Produtos',
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='produto_create', label='Adicionar Produto', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='produto_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -156,9 +185,24 @@ def produto_delete(request, pk):
 
 
 def Categoria_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Categoria_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Categoria.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Categoria',
-        'object_list': Categoria.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Categoria_create', label='Adicionar Categoria', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Categoria_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -200,9 +244,24 @@ def Categoria_delete(request, pk):
 
 
 def Unidade_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Unidade_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Unidade.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Unidade',
-        'object_list': Unidade.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Unidade_create', label='Adicionar Unidade', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Unidade_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -247,9 +306,24 @@ def Unidade_delete(request, pk):
 
 
 def Marca_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Marca_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Marca.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Marca',
-        'object_list': Marca.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Marca_create', label='Adicionar Marca', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Marca_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -293,9 +367,24 @@ def Marca_delete(request, pk):
 
 
 def Cliente_list(request):
+    
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('lista_produtos')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Cliente.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Cliente',
-        'object_list': Cliente.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Cliente_create', label='Adicionar Cliente', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Cliente_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -339,9 +428,24 @@ def Cliente_delete(request, pk):
 
 
 def Fornecedor_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Fornecedor_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Fornecedor.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Fornecedor',
-        'object_list': Fornecedor.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Fornecedor_create', label='Adicionar Fornecedor', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Fornecedor_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -385,9 +489,24 @@ def Fornecedor_delete(request, pk):
 
 
 def Funcionario_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Funcionario_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Funcionario.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Funcionario',
-        'object_list': Funcionario.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Funcionario_create', label='Adicionar Funcionario', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Funcionario_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -430,9 +549,24 @@ def Funcionario_delete(request, pk):
 
 
 def Localizacao_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('Localizacao_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Localizacao.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Localização',
-        'object_list': Localizacao.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Localizacao_create', label='Adicionar Localização', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='Localizacao_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -476,9 +610,24 @@ def Localizacao_delete(request, pk):
 
 
 def ordem_compra_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('ordem_compra_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+ 
+    model_list = OrdemCompra.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Ordens de Compras',
-        'object_list': OrdemCompra.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='adicionar_ordem_compra', label='Adicionar Ordem de Compra', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='editar_ordem_compra', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -575,9 +724,24 @@ def deletar_ordem_compra(request, pk):
 
 
 def ordem_venda_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('ordem_venda_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = OrdemVenda.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Ordens de Venda',
-        'object_list': OrdemVenda.objects.all(),
+        'object_list': page_obj,
         'ActionAdd': ListAction(url_name='adicionar_ordem_venda', label='Adicionar Ordem de Venda', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='editar_ordem_venda', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
@@ -672,9 +836,24 @@ def deletar_ordem_venda(request, pk):
 
 
 def configuracao_sistema_list(request):
+
+    if request.GET.get("list"):
+        set_list_value_in_cache(int(request.GET.get("list")))
+
+        return redirect('configuracao_sistema_list')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+     
+    model_list = ConfiguracaoSistema.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'model_name': 'Configuração de Sistema',
-        'object_list': ConfiguracaoSistema.objects.all(),
+        'object_list': page_obj,
         'list_actions': [
             ListAction(url_name='editar_configuracao_sistema', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
         ],
