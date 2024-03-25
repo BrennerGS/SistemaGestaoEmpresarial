@@ -29,6 +29,17 @@ class Marca(models.Model):
     def __str__(self):
         return f"{self.nome}"
 
+class Promocao(models.Model):
+    produto = models.ForeignKey('Produto', on_delete=models.CASCADE)
+    Categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
+    data_inicio = models.DateField()
+    data_fim = models.DateField()
+    desconto = models.DecimalField(max_digits=5, decimal_places=2)
+    status = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.produto} - Desconto: {self.desconto}%"
+
 class Unidade(models.Model):
     nome = models.CharField(max_length=10)
     

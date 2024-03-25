@@ -14,6 +14,10 @@ class CategoriaAdmin(admin.ModelAdmin):
     list_display = ('nome', 'descricao',)
     search_fields = ('nome', 'descricao',)
 
+class PromocaoAdmin(admin.ModelAdmin):
+    list_display = ('produto', 'Categoria','data_inicio','data_fim','desconto','status',)
+    search_fields = ('produto', 'Categoria','data_inicio','data_fim','desconto','status',)
+
 class MarcaAdmin(admin.ModelAdmin):
     list_display = ('nome', 'descricao',)
     search_fields = ('nome', 'descricao',)
@@ -41,6 +45,7 @@ class LocalizacaoAdmin(admin.ModelAdmin):
 
 admin.site.register(Produto, ProdutoAdmin)
 admin.site.register(Categoria, CategoriaAdmin)
+admin.site.register(Promocao, PromocaoAdmin)
 admin.site.register(Marca, MarcaAdmin)
 admin.site.register(Unidade, UnidadeAdmin)
 admin.site.register(Cliente,ClienteAdmin)

@@ -99,6 +99,7 @@ def produto_list(request):
 
     if request.GET.get("list") and request.GET.get("list").isdigit():
         set_list_value_in_cache(int(request.GET.get("list")))
+        Qtlist = 20
 
         return redirect('lista_produtos')
     
@@ -242,6 +243,35 @@ def Categoria_delete(request, pk):
     else:
         return render(request, 'generico/form_delete.html', {'delete': categoria, 'model_name':'Deletar Categoria', 'ActionCancel': 'Categoria_list'})
 
+def Promocao_list(request):
+
+    if request.GET.get("list") and request.GET.get("list").isdigit():
+        set_list_value_in_cache(int(request.GET.get("list")))
+        Qtlist = 20
+
+        return redirect('lista_Promocao')
+    
+    else:
+        Qtlist = get_list_value_from_cache()
+
+    model_list = Promocao.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'model_name': 'Promoções',
+        'object_list': page_obj,
+        'ActionAdd': ListAction(url_name='Categoria_create', label='Adicionar Categoria', icon='fa fa-plus', cor='w3-green'),
+        'list_actions': [
+            ListAction(url_name='Categoria_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
+            ListAction(url_name='Categoria_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
+        ],
+        'column_titles' : [f.name for f in Promocao._meta.fields],
+        'get_attribute': get_attribute,
+    }
+    return render(request, 'generico/base_list.html', context)
 
 def Unidade_list(request):
 
