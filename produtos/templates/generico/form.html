@@ -20,12 +20,30 @@
     </div>
     <!-- /.card-header -->
     <!-- form start -->
-    <form id="quickForm">
+    <form id="quickForm" action="" method="POST" enctype="multipart/form-data">
         <div class="card-body">
             {% csrf_token %}
             {% for field in form %}
+            {% if field.label != 'Descricao' %}
             <div class="form-group">
+            {% else%}
+            
+            {% endif %}
+                    
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                {% for action in a.fieldName %}
+                    {% if field.name == action.name %}
+                    {% if action %}
+                    <a class="btn btn-outline-secondary" style="margin: 5px; font-size: 10px; " {% if not action.formGen %}
+                        onclick="myFunction('{% url action.url_name %}');" {% else %} data-bs-toggle="offcanvas"
+                        data-bs-target="#OpenModal{{ action.id }}" {% endif %}>
+                        {{ action.label }}
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}
+
                 {% if field.widget.input_type != 'checkbox' %}
                 {{ field }}
                 <script>

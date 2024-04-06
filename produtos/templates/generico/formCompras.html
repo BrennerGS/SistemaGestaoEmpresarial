@@ -9,7 +9,8 @@
     <h2 class="text-center">{{ model_name }}</h2>
     <form method="post" style="width: 70%; margin-left: 15%; margin-right: 15%;" enctype="multipart/form-data">
         {% csrf_token %}
-
+        <button type="button" class="btn btn-light" style="clear: right;" onclick="calcularTotal()">Atualizar
+            Valores</button>
         {% for field in form %}
         <div class="form-group">
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -48,141 +49,61 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
+
+
                     {{ item_formset.management_form }}
-                    
                     {% for item in item_formset %}
-
-                    
-
                     <tr>
                         <td>
-                            <select class="product-select"
-                                name="itemordemcompra_set-{{ forloop.counter0 }}-produto" id="productSelect"
-                                onchange="updatePrices(this)">
-                                {% for ItensForm in ItensForms %}
-                                <option value="{{ ItensForm.id }}" data-price="{{ ItensForm.preco }}">{{ ItensForm.nome}}</option>
-                                {% endfor %}
-                            </select>
+                            {{ item.produto }}
+                            <script>
+                                document.getElementById("{{ item.produto.id_for_label }}").classList.add("produto");
+                            </script>
                         </td>
                         <td>
-                            <input type="number" class="quantity-input" name="itemordemcompra_set-{{ forloop.counter0 }}-quantidade" oninput="updateAllPrices()" value="1" min="1">
+                            {{ item.quantidade }}
+                            <script>
+
+                                document.getElementById("{{ item.quantidade.id_for_label }}").classList.add("quantidade");
+                            </script>
                         </td>
                         <td>
+                            {{ item.preco_unitario }}
+                            <script>
+                                document.getElementById("{{ item.preco_unitario.id_for_label }}").classList.add("preco_unitario");
+                            </script>
+                        </td>
+                        <td>
+
                             <div class="input-container">
                                 <i class="fa fa-money icon"></i>
-                            <input type="text" class="input-field unit-price-input "
-                                name="itemordemcompra_set-{{ forloop.counter0 }}-preco_unitario"
-                                onfocus="updateAllPrices()" value="">
+                                <input type="text" class="input-field total-input form-control" value="0" disabled>
                             </div>
                         </td>
                         <td>
-                            <div class="input-container">
-                                <i class="fa fa-money icon"></i>
-                                <input type="text" class="input-field total-input form-control" value="" disabled>
-                            </div>
-                        </td>
-                        <td>
-                            <label for="id_itemordemcompra_set-{{ forloop.counter0 }}-DELETE">Delete:</label>
 
 
+                            {{ item_formset.itens }}
+                            {% if item.id.value %}
+                            <a href="{% url 'adicionar_ordem_compraExtra'  %}?back={{request.path}}"
+                                class="btn btn-danger">Excluir</a>
+                            {% else %}
+                            <button type="button" class="btn btn-danger" onclick="removerItem(this)">Remover</button>
+                            {% endif %}
 
-                            <input type="checkbox" name="itemordemcompra_set-{{ forloop.counter0 }}-DELETE"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-DELETE">
-
-                            <input type="hidden" name="itemordemcompra_set-{{ forloop.counter0 }}-id"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-id">
-                            <input type="hidden" name="itemordemcompra_set-{{ forloop.counter0 }}-ordem_compra"
-                                id="id_itemordemcompra_set-{{ forloop.counter0 }}-ordem_compra">
-
-
-                                <a href="{% url 'adicionar_ordem_compraExtra' ExtraDeclement %}" value="+ Add">remove</a>
+                            {{ item.id }}
+                            {{ item.ordem_compra }}
                         </td>
                     </tr>
-
-
-
                     {% endfor %}
-
-
-                    
-
-
-
                 </tbody>
             </table>
-            
-            <a href="{% url 'adicionar_ordem_compraExtra' ExtraInclement %}" value="+ Add">+ Add another Item Ordem de Compra</a>
-            
+
+            <a href="{% url 'adicionar_ordem_compraExtra' ExtraInclement%}" class="btn btn-primary" value="+ Add">+
+                Adicionar item</a>
+
         </div>
-
-        <script>
-            function updateFormsetFields() {
-                // Obter os campos do formset
-                var totalFormsInput = document.getElementById("itemordemcompra_set-TOTAL_FORMS");
-                var initialFormsInput = document.getElementById("itemordemcompra_set-INITIAL_FORMS");
-                var minNumFormsInput = document.getElementById("itemordemcompra_set-MIN_NUM_FORMS");
-                var maxNumFormsInput = document.getElementById("itemordemcompra_set-MAX_NUM_FORMS");
-
-                // Atualizar os valores dos campos
-                var totalForms = document.querySelectorAll('.quantity-input').length;
-                totalFormsInput.value = totalForms;
-                initialFormsInput.value = "0";  // Inicialmente, todos são novos
-                minNumFormsInput.value = "0";  // Mínimo de forms permitidos
-                maxNumFormsInput.value = "1000";  // Máximo de forms permitidos
-            }
-
-            window.addEventListener('load', updateFormsetFields);
-            function removeRow(button) {
-                var row = button.parentNode.parentNode;
-                row.parentNode.removeChild(row);
-                updateAllPrices();
-                updateAllPricess();
-            }
-
-            function updatePrices(select, rowIndex) {
-                var row = select.parentNode.parentNode;
-                var quantity = row.querySelector(".quantity-input").value;
-                var unitPrice = select.options[select.selectedIndex].getAttribute("data-price");
-                var total = quantity * unitPrice;
-
-
-                row.querySelector(".total-input").value = total.toFixed(2);
-
-                row.querySelector(".unit-price-input").value = unitPrice;
-                row.querySelector(".total-input").value = 'R$' + total.toFixed(2);
-                updateAllPricess();
-            }
-
-            // Add this function to update prices for all rows on page load
-            function updateAllPrices() {
-                var selects = document.querySelectorAll(".product-select");
-                selects.forEach(function (select, index) {
-                    updatePrices(select, index);
-                });
-                updateAllPricess();
-            }
-
-            // Call the updateAllPrices function when the page loads
-
-
-            function updateAllPricess() {
-                var selects = document.querySelectorAll(".product-select");
-                var total = 0;
-
-                selects.forEach(function (select) {
-                    var row = select.parentNode.parentNode;
-                    var quantity = row.querySelector(".quantity-input").value;
-                    var unitPrice = parseFloat(select.options[select.selectedIndex].getAttribute("data-price"));
-                    var rowTotal = quantity * unitPrice;
-                    total += rowTotal;
-                });
-
-                document.getElementById("id_total").value = total.toFixed(2);
-            }
-            window.addEventListener('load', updateAllPrices)
-            window.addEventListener('load', updateAllPricess);
-        </script>
 
         {% endif %}
         <br>
@@ -193,7 +114,48 @@
         </div>
     </form>
 </div>
+<script>
+    // Função para calcular o total e atualizar o input
+    function calcularTotal() {
+        var total = 0;
 
+        // Iterar sobre as linhas da tabela
+        var rows = document.querySelectorAll("#itemsTable tbody tr");
+
+        rows.forEach(function (row) {
+            // Obter quantidade e preço unitário da linha
+            var quantidade = parseInt(row.querySelector(".quantidade").value);
+            var precoUnitario = parseFloat(row.querySelector(".preco_unitario").value);
+
+            // Calcular total da linha
+            var totalLinha = quantidade * precoUnitario;
+
+            // Adicionar total da linha ao total geral
+            total += totalLinha;
+
+            // Atualizar o valor na coluna "TOTAL" (index 3)
+            row.cells[3].querySelector(".total-input").value = totalLinha.toFixed(2);
+        });
+
+        // Atualizar o valor total no input com id "id_total"
+        document.getElementById("id_total").value = total.toFixed(2);
+    }
+
+    // Chamar a função inicialmente para calcular o total ao carregar a página
+    calcularTotal();
+
+    // Função para remover dinamicamente a linha da tabela
+    function removerItem(button) {
+        var row = button.closest('tr');
+        var formset = row.closest('form').querySelector('#itemsTable tbody');
+
+        // Remover a linha da tabela
+        row.remove();
+
+        // Recalcular o total após remover a linha
+        calcularTotal();
+    }
+</script>
 <script>
     function myFunction(url) {
         window.open(url, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=1, left=1, width=800, height=600");

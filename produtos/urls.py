@@ -18,6 +18,9 @@ urlpatterns = [
      path('categoria/delete/<int:pk>', Categoria_delete, name='Categoria_delete'),
 
      path('promocao/', Promocao_list, name='Promocao_list'),
+     path('promocao/create', Promocao_create, name='Promocao_create'),
+     path('promocao/edit/<int:pk>', Promocao_edit, name='Promocao_edit'),
+     path('promocao/delete/<int:pk>', Promocao_delete, name='Promocao_delete'),
 
      path('unidades/', Unidade_list, name='Unidade_list'),
      path('unidade/create', Unidade_create, name='Unidade_create'),

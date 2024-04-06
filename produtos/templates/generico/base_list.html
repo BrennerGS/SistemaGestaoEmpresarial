@@ -3,17 +3,7 @@
 {% block content %}
 {% load custom_filters %}
 
-{% if messages %}
-          {% for message in messages %}
-          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-            <!-- <strong>{% if message.tags %}alert-{{ message.tags }}{% endif %}</strong> -->
-            {{ message }}
 
-          </div>
-          {% endfor %}
-          {% endif %}
     
     {% if object_list %}
     <div class="card">
