@@ -3,9 +3,17 @@
 {% block content %}
 {% load custom_filters %}
 
-
+    {% if ActionAdd and not object_list %}
+        <div class="card-title">
+            <a class="btn" href="{% url ActionAdd.url_name %}" title=" {{ ActionAdd.label }}">
+                <i class="{{ ActionAdd.icon }}"></i>
+            </a>
+        </div>
+    {% endif %}
     
     {% if object_list %}
+
+    
     <div class="card">
         <div class="card-header">
             
