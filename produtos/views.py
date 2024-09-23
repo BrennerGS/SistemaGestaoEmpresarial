@@ -101,7 +101,7 @@ def dashboard(request):
 @login_required
 @permission_required('produtos.view_produto',raise_exception=True)
 def produto_list(request):
-
+    
     if request.GET.get("list") and request.GET.get("list").isdigit():
         set_list_value_in_cache(int(request.GET.get("list")))
         Qtlist = 20
@@ -110,8 +110,14 @@ def produto_list(request):
     
     else:
         Qtlist = get_list_value_from_cache()
+    
+    user_profiles = UserProfile.objects.filter(user=request.user)
 
-    UserProfiles = UserProfile.objects.get(user=request.user)
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
 
     model_list = Produto.objects.all()
     paginator = Paginator(model_list, Qtlist) 

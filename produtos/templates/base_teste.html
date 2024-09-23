@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,19 +8,15 @@
   <title>AdminLTE 3 | Dashboard 2</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="/media/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="{% static '/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css' %}">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="/media/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="{% static '/AdminLTE-3.2.0/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
   <!-- summernote -->
-  <link rel="stylesheet" href="/media/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="{% static '/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css' %}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/media/AdminLTE-3.2.0/dist/css/adminlte.min.css">
-
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="{% static '/AdminLTE-3.2.0/dist/css/adminlte.min.css' %}">
 
 
 </head>
@@ -116,8 +113,7 @@
             <a href="#" class="dropdown-item">
               <!-- Message Start -->
               <div class="media">
-                <img src="/media/AdminLTE-3.2.0/dist/img/user3-128x128.jpg" alt="User Avatar"
-                  class="img-size-50 img-circle mr-3">
+                <img src="/media/AdminLTE-3.2.0/dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
                 <div class="media-body">
                   <h3 class="dropdown-item-title">
                     Nora Silvester
@@ -188,7 +184,11 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="/media/{{ UserProfiles.imagem }}" class="img-circle elevation-2" alt="User Image">
+            {%if not UserProfiles.imagem %}
+            
+            {% else %}
+            <img src="/media/{{ UserProfiles.imagem }}"  class="img-circle elevation-2"  alt="User Image">
+            {%endif%}
           </div>
           <div class="info">
             <a href="#" class="d-block">{{ user.get_full_name }}</a>
@@ -423,28 +423,28 @@
 
   <!-- REQUIRED SCRIPTS -->
   <!-- jQuery -->
-  <script src="/media/AdminLTE-3.2.0/plugins/jquery/jquery.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/jquery/jquery.min.js' %}"></script>
   <!-- Bootstrap -->
-  <script src="/media/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- overlayScrollbars -->
-  <script src="/media/AdminLTE-3.2.0/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
   <!-- AdminLTE App -->
-  <script src="/media/AdminLTE-3.2.0/dist/js/adminlte.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/dist/js/adminlte.js' %}"></script>
   
   <!-- Summernote -->
-  <script src="/media/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.js' %}"></script>
 
   <!-- PAGE PLUGINS -->
   <!-- jQuery Mapael -->
-  <script src="/media/AdminLTE-3.2.0/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-  <script src="/media/AdminLTE-3.2.0/plugins/raphael/raphael.min.js"></script>
-  <script src="/media/AdminLTE-3.2.0/plugins/jquery-mapael/jquery.mapael.min.js"></script>
-  <script src="/media/AdminLTE-3.2.0/plugins/jquery-mapael/maps/usa_states.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/jquery-mousewheel/jquery.mousewheel.js' %}"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/raphael/raphael.min.js' %}"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/jquery-mapael/jquery.mapael.min.js' %}"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/jquery-mapael/maps/usa_states.min.js' %}"></script>
   <!-- ChartJS -->
-  <script src="/media/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/plugins/chart.js/Chart.min.js' %}"></script>
 
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="/media/AdminLTE-3.2.0/dist/js/pages/dashboard2.js"></script>
+  <script src="{% static '/AdminLTE-3.2.0/dist/js/pages/dashboard2.js' %}"></script>
 
 
   <script>
