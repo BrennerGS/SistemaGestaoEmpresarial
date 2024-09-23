@@ -4,7 +4,10 @@ from .models import *
 
 
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'imagem')  # Adicione os campos desejados
 
+admin.site.register(UserProfile, UserProfileAdmin)
 
 class ProdutoAdmin(admin.ModelAdmin):
     list_display = ('nome', 'descricao', 'preco',)

@@ -17,6 +17,11 @@
   <link rel="stylesheet" href="/media/AdminLTE-3.2.0/plugins/summernote/summernote-bs4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/media/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -183,10 +188,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="/media/AdminLTE-3.2.0/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            <img src="/media/{{ UserProfiles.imagem }}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a href="#" class="d-block">{{ user.get_full_name }}</a>
           </div>
         </div>
 
@@ -207,7 +212,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-            <li class="nav-header">EXAMPLES</li>
+            <li class="nav-header">Menu</li>
           <li class="nav-item">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-cubes"></i>
@@ -236,10 +241,10 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
+                <a href="{% url 'Promocao_list' %}" class="nav-link">
                   
-                  <p>Lista de Preços</p>
-                  <span class="right badge badge-danger">Montar</span>
+                  <p>Promoção</p>
+                  <span class="right badge badge-danger"></span>
                 </a>
               </li>
               <li class="nav-item">
@@ -273,13 +278,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.html" class="nav-link active">
+                <a href="{% url 'ordem_compra_list' %}" class="nav-link active">
                   
                   <p>Pedidos de Compra</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
+                <a href="{% url 'ordem_compra_list' %}" class="nav-link">
                   
                   <p>Notas de Entrada</p>
                 </a>
@@ -319,14 +324,19 @@
                   <p>Frente de Caixa</p>
                 </a>
               </li>
-              
+              <li class="nav-item">
+                <a href="{% url 'ordem_venda_list' %}" class="nav-link">
+                  
+                  <p>Ordem de Venda</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="{% url 'configuracao_sistema_list' %}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Widgets
+                Configuração
                 <span class="right badge badge-danger">New</span>
               </p>
             </a>
@@ -368,6 +378,18 @@
 
         <div class="container-fluid">
 
+          {% if messages %}
+
+          {% for message in messages %}
+            <div class="alert {% if message.tags %} alert-{{ message.tags }}{% endif %} ">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+               {{ message }}
+            </div>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            
+          {% endfor %}
+          {% endif %}
+          
           
 
 
@@ -424,7 +446,10 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
   <script src="/media/AdminLTE-3.2.0/dist/js/pages/dashboard2.js"></script>
 
+
   <script>
+  
+    
     function initializeSummernote() {
         // Seleciona todos os campos textarea
         var textareas = document.querySelectorAll('textarea');

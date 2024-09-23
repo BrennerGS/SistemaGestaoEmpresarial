@@ -1,92 +1,147 @@
-{% extends 'base.html' %}
+{% extends 'base_teste.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">Dashboard</h1>
-    <div class="row">
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card  border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Funcionários</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'Funcionario_list' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'Funcionario_create' %}" class="btn btn-light">Criar Funcionario</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card  border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Fornecedores</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'Fornecedor_list' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'Fornecedor_create' %}" class="btn btn-light">Criar Fornecedor</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card  border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Clientes</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'Cliente_list' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'Cliente_create' %}" class="btn btn-light">Criar Cliente</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card  border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Produtos</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'lista_produtos' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'produto_create' %}" class="btn btn-light">Criar produto</a></p>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card  border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Ordens de Compras</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'ordem_compra_list' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'adicionar_ordem_compra' %}" class="btn btn-light">Criar ordens de vendas</a></p>
-                </div>
-            </div>
+<div class="row">
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+        <div class="inner">
+          <h3>Funcionários</h3>
+
+          <p>&nbsp;</p>
         </div>
-        
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Ordens de Vendas</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'ordem_venda_list' %}" class="btn btn-light">Ver lista</a></p>
-                    <p class="card-text"><a href="{% url 'adicionar_ordem_venda' %}" class="btn btn-light">Criar ordens de vendas</a></p>
-                </div>
-            </div>
+        <div class="icon">
+          <i class="fas fa-user-tie"></i>
         </div>
-
-        <div class="col-sm-6 col-md-6 col-lg-3">
-            <div class="card border-dark mb-4">
-                <div class="card-header bg-while text-dark">
-                    <h3>Configuração sistema</h3>
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><a href="{% url 'configuracao_sistema_list' %}" class="btn btn-light">Ver</a></p>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-        </div>
-
-
-
+        <a href="{% url 'Funcionario_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
     </div>
-</div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box" style="background-color: #0d5c81; color: #ffffff;">
+        <div class="inner">
+          <h3>Fornecedores</h3>
+
+          <p>&nbsp;</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-people-carry"></i>
+        </div>
+        <a href="{% url 'Fornecedor_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box" style="background-color: #17abf0; color: #ffffff;">
+        <div class="inner">
+          <h3>Clientes</h3>
+
+          <p>&nbsp;</p>
+        </div>
+        <div class="icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <a href="{% url 'Cliente_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box" style="background-color: #478eaf; color: #ffffff;">
+        <div class="inner">
+          <h3>Produtos</h3>
+
+          <p>&nbsp;</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-shopping-cart"></i>
+        </div>
+        <a href="{% url 'lista_produtos' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+
+
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box" style="background-color: #2890af; color: #ffffff;">
+          <div class="inner">
+            <h3>Ordens de Compras</h3>
+  
+            <p>&nbsp;</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-pallet"></i>
+          </div>
+          <a href="{% url 'ordem_compra_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box" style="background-color: #164ea1; color: #ffffff;">
+          <div class="inner">
+            <h3>Ordens de Vendas</h3>
+  
+            <p>&nbsp;</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-dolly-flatbed"></i>
+          </div>
+          <a href="{% url 'ordem_venda_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
+          <div class="inner">
+            <h3>Configurações</h3>
+  
+            <p>&nbsp;</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-cogs"></i>
+          </div>
+          <a href="{% url 'configuracao_sistema_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
+          <div class="inner">
+            <h3>Promoção</h3>
+  
+            <p>&nbsp;</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <a href="{% url 'Promocao_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+
+      <!-- ./col -->
+      <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
+          <div class="inner">
+            <h3>Categorias</h3>
+  
+            <p>&nbsp;</p>
+          </div>
+          <div class="icon">
+            <i class="fas fa-stream"></i>
+          </div>
+          <a href="{% url 'Categoria_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+      </div>
+      
+  </div>
+
+
 {% endblock %}

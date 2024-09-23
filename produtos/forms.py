@@ -8,6 +8,12 @@ class ProdutoForm(forms.ModelForm):
         model = Produto
         fields = ['nome', 'categoria', 'marca', 'unidade', 'estoque_minimo', 'estoque_maximo', 'preco', 'imagem','descricao']
 
+class PromocaoForm(forms.ModelForm):
+    class Meta:
+        model = Promocao
+        fields = ['produto', 'Categoria', 'data_inicio', 'data_fim', 'desconto', 'status']
+
+
 class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
@@ -49,7 +55,7 @@ class OrdemCompraForm(forms.ModelForm):
         model = OrdemCompra
         fields = ['fornecedor', 'total']
 
-ItemOrdemCompraFormSet = inlineformset_factory(OrdemCompra, ItemOrdemCompra, fields=('produto', 'quantidade', 'preco_unitario'), extra=2, can_delete=True)
+ItemOrdemCompraFormSet = inlineformset_factory(OrdemCompra, ItemOrdemCompra, fields=('produto', 'quantidade', 'preco_unitario'), extra=1, can_delete=True)
 
 class ItemOrdemCompraForm(forms.ModelForm):
     class Meta:
@@ -61,7 +67,7 @@ class OrdemVendaForm(forms.ModelForm):
         model = OrdemVenda
         fields = ['cliente', 'total']
 
-ItemOrdemVendaFormSet = inlineformset_factory(OrdemVenda, ItemOrdemVenda, fields=('produto', 'quantidade', 'preco_unitario'), extra=2, can_delete=True)
+ItemOrdemVendaFormSet = inlineformset_factory(OrdemVenda, ItemOrdemVenda, fields=('produto', 'quantidade', 'preco_unitario'), extra=1, can_delete=True)
 
 class ItemOrdemVendaForm(forms.ModelForm):
     class Meta:
