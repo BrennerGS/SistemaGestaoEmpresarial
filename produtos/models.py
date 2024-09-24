@@ -36,7 +36,6 @@ class Marca(models.Model):
 
 class Promocao(models.Model):
     produto = models.ForeignKey('Produto', on_delete=models.CASCADE)
-    Categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
     data_inicio = models.DateField()
     data_fim = models.DateField()
     desconto = models.DecimalField(max_digits=5, decimal_places=2)

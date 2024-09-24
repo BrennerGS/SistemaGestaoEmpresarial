@@ -11,7 +11,7 @@ class ProdutoForm(forms.ModelForm):
 class PromocaoForm(forms.ModelForm):
     class Meta:
         model = Promocao
-        fields = ['produto', 'Categoria', 'data_inicio', 'data_fim', 'desconto', 'status']
+        fields = ['produto', 'data_inicio', 'data_fim', 'desconto', 'status']
 
 
 class ClienteForm(forms.ModelForm):

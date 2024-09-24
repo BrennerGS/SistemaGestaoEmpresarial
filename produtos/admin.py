@@ -18,7 +18,7 @@ class CategoriaAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'descricao',)
 
 class PromocaoAdmin(admin.ModelAdmin):
-    list_display = ('produto', 'Categoria','data_inicio','data_fim','desconto','status',)
+    list_display = ('produto','data_inicio','data_fim','desconto','status',)
     search_fields = ('produto', 'Categoria','data_inicio','data_fim','desconto','status',)
 
 class MarcaAdmin(admin.ModelAdmin):
