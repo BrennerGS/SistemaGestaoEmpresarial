@@ -184,8 +184,11 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            {%if not UserProfiles.imagem %}
             
+            {%if not UserProfiles.imagem and not a.UserProfiles.imagem%}
+            
+            {% elif a.UserProfiles.imagem %}
+            <img src="/media/{{ a.UserProfiles.imagem }}"  class="img-circle elevation-2"  alt="User Image">
             {% else %}
             <img src="/media/{{ UserProfiles.imagem }}"  class="img-circle elevation-2"  alt="User Image">
             {%endif%}

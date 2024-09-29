@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 
 from produtos.views import get_list_value_from_cache, set_list_value_in_cache
-
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
 class Cliente_list(LoginRequiredMixin, PermissionRequiredMixin, ListView):
@@ -25,6 +25,11 @@ class Cliente_list(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     raise_exception = True
     paginate_by = 1 # Valor padrão, caso o cache falhe
 
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return redirect('login')  # Redireciona para a página de login
+        raise PermissionDenied  # Ou personalize a página de erro 403
+    
     def get_paginate_by(self, queryset):
         # Verifica se o valor de list está na URL e se é um número
         if self.request.GET.get("list") and self.request.GET.get("list").isdigit():

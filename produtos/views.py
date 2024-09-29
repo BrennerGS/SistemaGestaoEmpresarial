@@ -321,7 +321,14 @@ def Promocao_list(request):
     elif get_list_value_from_cache():
         Qtlist = get_list_value_from_cache()
     
-    
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+
     model_list = Promocao.objects.all()
     paginator = Paginator(model_list, Qtlist) 
 
@@ -329,6 +336,7 @@ def Promocao_list(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
+        'UserProfiles': UserProfiles,
         'model_name': 'Promoções',
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Promocao_create', label='Adicionar Promoções', icon='fa fa-plus', cor='w3-green'),
@@ -360,12 +368,25 @@ def Promocao_create(request):
             messages.warning(request, "Erro por favor tente novamente mais tarde!")
             return redirect('Promocao_list')
     else:
-        form = PromocaoForm()
-    context = {
-        'fieldName' : [],
-    }
+        form = PromocaoForm()  
 
-    return render(request, 'generico/form.html', {'form': form, 'a': context, 'model_name':'Cadastro de Promoções', 'ActionCancel': 'Promocao_list'})
+        user_profiles = UserProfile.objects.filter(user=request.user)
+        
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+        
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'fieldName' : [],
+            'model_name':'Cadastro de Promoções',
+            'ActionCancel': 'Promocao_list',
+        }
+
+        return render(request, 'generico/form.html', context)
 
 @login_required    
 @permission_required('produtos.change_promocao') 
@@ -389,12 +410,24 @@ def Promocao_edit(request, pk):
             return redirect('Promocao_list')
     else:
         form = PromocaoForm(instance=promocao)
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
 
-    context = {
-        'fieldName' : [],
-    }
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+        
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'fieldName' : [],
+            'model_name':'Cadastro de Promoções',
+            'ActionCancel': 'Promocao_list',
+        }
 
-    return render(request, 'generico/form.html', {'form': form, 'a': context, 'model_name':'Atualizar Promoção', 'ActionCancel': 'Promocao_list'})
+        return render(request, 'generico/form.html', context)
 
 @login_required    
 @permission_required('produtos.delete_promocao') 
@@ -403,9 +436,27 @@ def Promocao_delete(request, pk):
     if request.method == 'POST':
         promocao.delete()
         return redirect('Promocao_list')
-    else:
+    else:   
         form = PromocaoForm(instance=Promocao)
-    return render(request, 'generico/form_delete.html', {'form': form,'delete': promocao, 'model_name':'Deletar Promoção', 'ActionCancel': 'Promocao_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'delete': promocao,
+            'model_name':'Atualizar Promoção',
+            'ActionCancel': 'Promocao_list',
+            'fieldName' : [],
+        }
+        
+    return render(request, 'generico/form_delete.html', context)
 
 @login_required    
 @permission_required('produtos.view_unidade') 
@@ -686,6 +737,14 @@ def Fornecedor_list(request):
     else:
         Qtlist = get_list_value_from_cache()
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+
     model_list = Fornecedor.objects.all()
     paginator = Paginator(model_list, Qtlist) 
 
@@ -693,6 +752,7 @@ def Fornecedor_list(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
+        'UserProfiles': UserProfiles,
         'model_name': 'Fornecedor',
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Fornecedor_create', label='Adicionar Fornecedor', icon='fa fa-plus', cor='w3-green'),
