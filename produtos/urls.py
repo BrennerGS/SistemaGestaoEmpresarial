@@ -31,11 +31,6 @@ urlpatterns = [
      path('Marca/create', Marca_create, name='Marca_create'),
      path('Marca/edit/<int:pk>', Marca_edit, name='Marca_edit'),
      path('Marca/delete/<int:pk>', Marca_delete, name='Marca_delete'),
-     
-     path('Cliente_list/', Cliente_list, name='Cliente_list'),
-     path('Cliente/create', Cliente_create, name='Cliente_create'),
-     path('Cliente/edit/<int:pk>', Cliente_edit, name='Cliente_edit'),
-     path('Cliente/delete/<int:pk>', Cliente_delete, name='Cliente_delete'),
 
      path('Fornecedor/', Fornecedor_list, name='Fornecedor_list'),
      path('Fornecedor/create', Fornecedor_create, name='Fornecedor_create'),
@@ -73,4 +68,4 @@ urlpatterns = [
      
 
      # path('api_request/', api_request_view, name='api_request'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

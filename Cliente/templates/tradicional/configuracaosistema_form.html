@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{% if request.resolver_match.url_name == 'configuracao_sistema_create' %}Nova Configuração do Sistema{% else %}Editar Configuração do Sistema{% endif %}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+  </form>
+  
+  <a href="{% url 'configuracao_sistema_list' %}">Voltar para a Lista</a>
+</div>
+{% endblock %}

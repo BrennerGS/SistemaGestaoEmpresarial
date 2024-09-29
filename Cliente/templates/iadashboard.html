@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Available URLs</h1>
+  <ul>
+  {% for app in apps %}
+    <li>{{ app.name }}</li>
+    <ul>
+    {% for view, url in app.urls.items %}
+      <li>{{ view }} - {{ url }}</li>
+    {% endfor %}
+    </ul>
+  {% endfor %}
+  </ul>
+{% endblock %}

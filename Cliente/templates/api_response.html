@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resposta da API</title>
+</head>
+<body>
+    <h1>Resposta da API</h1>
+    {% if api_response %}
+        <p>Código de status: {{ api_response.status_code }}</p>
+        <p>Resposta JSON:</p>
+        <pre>{{ api_response.json | safe }}</pre>
+    {% else %}
+        <p>Falha na requisição.</p>
+    {% endif %}
+</body>
+</html>

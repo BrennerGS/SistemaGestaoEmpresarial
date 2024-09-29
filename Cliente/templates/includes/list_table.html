@@ -1,0 +1,22 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            {% for title in column_titles %}
+                <th>{{ title }}</th>
+            {% endfor %}
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in object_list %}
+            <tr>
+                {% for title in column_titles %}
+                    <td>{{ get_attribute(obj, title) }}</td>
+                {% endfor %}
+                <td>
+                    {% include 'includes/list_actions.html' with obj=obj %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
