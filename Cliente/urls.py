@@ -10,5 +10,7 @@ urlpatterns = [
      path('edit/<int:pk>', Cliente_edit.as_view(), name='Cliente_edit'),
      path('delete/<int:pk>', Cliente_delete.as_view(), name='Cliente_delete'),
 
+     path('sem-permissao/', sem_permissao, name='sem_permissao'),
+
      # path('api_request/', api_request_view, name='api_request'),
 ] 

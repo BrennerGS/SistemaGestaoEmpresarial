@@ -225,24 +225,31 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              {% if perms.produtos.view_produto %}
               <li class="nav-item">
                 <a href="{% url 'lista_produtos' %}" class="nav-link">
                   
                   <p>Produtos</p>
                 </a>
               </li>
+              {% endif %}
+              {% if perms.Cliente.view_cliente %}
               <li class="nav-item">
                 <a href="{% url 'Cliente_list' %}" class="nav-link">
                   
                   <p>Clientes</p>
                 </a>
               </li>
+              {% endif %}
+              {% if perms.produtos.view_fornecedor %}
               <li class="nav-item">
                 <a href="{% url 'Fornecedor_list' %}" class="nav-link">
                   
                   <p>Fornecedores</p>
                 </a>
               </li>
+              {% endif %}
+              {% if perms.produtos.view_promocao %}
               <li class="nav-item">
                 <a href="{% url 'Promocao_list' %}" class="nav-link">
                   
@@ -250,12 +257,15 @@
                   <span class="right badge badge-danger"></span>
                 </a>
               </li>
+              {% endif %}
+              {% if perms.produtos.view_funcionario %}
               <li class="nav-item">
                 <a href="{% url 'Funcionario_list' %}" class="nav-link">
                   
                   <p>Funcionario</p>
                 </a>
               </li>
+              {% endif %}
               <li class="nav-item">
                 <a href="./index3.html" class="nav-link">
                   
@@ -280,12 +290,14 @@
                   <p>Controle de Estoque</p>
                 </a>
               </li>
+              {% if perms.produtos.view_ordemcompra %}
               <li class="nav-item">
                 <a href="{% url 'ordem_compra_list' %}" class="nav-link active">
                   
                   <p>Pedidos de Compra</p>
                 </a>
               </li>
+              {% endif %}
               <li class="nav-item">
                 <a href="{% url 'ordem_compra_list' %}" class="nav-link">
                   
@@ -327,14 +339,17 @@
                   <p>Frente de Caixa</p>
                 </a>
               </li>
+              {% if perms.produtos.view_ordemvenda %}
               <li class="nav-item">
                 <a href="{% url 'ordem_venda_list' %}" class="nav-link">
                   
                   <p>Ordem de Venda</p>
                 </a>
               </li>
+              {% endif %}
             </ul>
           </li>
+          {% if perms.produtos.view_configuracaosistema %}
           <li class="nav-item">
             <a href="{% url 'configuracao_sistema_list' %}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -344,6 +359,7 @@
               </p>
             </a>
           </li>
+          {% endif %}
           
           
           

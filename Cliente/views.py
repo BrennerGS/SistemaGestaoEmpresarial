@@ -16,19 +16,23 @@ from django.contrib import messages
 from produtos.views import get_list_value_from_cache, set_list_value_in_cache
 from django.core.exceptions import PermissionDenied
 
+
+def sem_permissao(request):
+    return render(request, '403.html', status=403)
+
 # Create your views here.
 class Cliente_list(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Cliente
     template_name = 'generico/base_list_r.html'
     context_object_name = 'object_list'
-    permission_required = 'Clientes.view_Cliente'
+    permission_required = 'Cliente.view_cliente'
     raise_exception = True
     paginate_by = 1 # Valor padrão, caso o cache falhe
 
     def handle_no_permission(self):
         if not self.request.user.is_authenticated:
-            return redirect('login')  # Redireciona para a página de login
-        raise PermissionDenied  # Ou personalize a página de erro 403
+            return redirect('/accounts/login')  # Redireciona para a página de login
+        return redirect('sem_permissao')
     
     def get_paginate_by(self, queryset):
         # Verifica se o valor de list está na URL e se é um número
@@ -54,6 +58,7 @@ class Cliente_list(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         
         # Adicionando informações personalizadas ao contexto
         context['model_name'] = 'Clientes'
+        
         context['ActionAdd'] = ListAction(
             url_name='Cliente_create', label='Adicionar Cliente', icon='fa fa-plus', cor='w3-green'
         )
@@ -92,6 +97,10 @@ class Cliente_create(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     # Adiciona variáveis de contexto extras (como 'ActionCancel' e 'model_name')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        user_profiles = UserProfile.objects.filter(user=self.request.user)
+        context['UserProfiles'] = user_profiles.first() if user_profiles.exists() else None
+
         context['model_name'] = 'Cadastro de Cliente'
         context['ActionCancel'] = reverse_lazy('Cliente_list')  # URL para cancelar a operação
         return context
@@ -114,6 +123,10 @@ class Cliente_edit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        user_profiles = UserProfile.objects.filter(user=self.request.user)
+        context['UserProfiles'] = user_profiles.first() if user_profiles.exists() else None
+
         context['model_name'] = 'Atualizar Cliente'
         context['ActionCancel'] = reverse_lazy('Cliente_list')
         return context
@@ -127,6 +140,10 @@ class Cliente_delete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        user_profiles = UserProfile.objects.filter(user=self.request.user)
+        context['UserProfiles'] = user_profiles.first() if user_profiles.exists() else None
+
         context['model_name'] = 'Deletar Cliente'
         context['ActionCancel'] = 'Cliente_list'
         return context

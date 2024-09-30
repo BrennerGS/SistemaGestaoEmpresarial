@@ -19,9 +19,11 @@
             
             {% if ActionAdd %}
             <div class="card-title">
+                {% if perms.Cliente.add_cliente %}
                 <a class="btn" href="{% url ActionAdd.url_name %}" title=" {{ ActionAdd.label }}">
                     <i class="{{ ActionAdd.icon }}"></i>
                 </a>
+                {% endif %}
                 <select class="btn" onchange="window.location.href = '?list=' + this.value">
                     <option>Quantidade por pagina</option>
                     <option value="1">1 por pagina</option>

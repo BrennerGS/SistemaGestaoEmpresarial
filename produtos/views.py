@@ -93,13 +93,23 @@ def api_request_DELETE(request):
     # Renderiza um template com a resposta da API
     return render(request, 'api_response.html', {'api_response': response})
 
-
-def dashboard(request):
-    
-    return render(request, 'dashboard.html')
-
 @login_required
+def dashboard(request):
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+        
+    context = {
+        'UserProfiles': UserProfiles,
+    }
+    return render(request, 'dashboard.html', context)
+
 @permission_required('produtos.view_produto',raise_exception=True)
+@login_required
 def produto_list(request):
     
     if request.GET.get("list") and request.GET.get("list").isdigit():
@@ -111,6 +121,12 @@ def produto_list(request):
     else:
         Qtlist = get_list_value_from_cache()
     
+    
+
+    model_list = Produto.objects.all()
+    paginator = Paginator(model_list, Qtlist) 
+    
+
     user_profiles = UserProfile.objects.filter(user=request.user)
 
     # Verifique se o queryset está vazio
@@ -119,8 +135,6 @@ def produto_list(request):
     else:
         UserProfiles = None 
 
-    model_list = Produto.objects.all()
-    paginator = Paginator(model_list, Qtlist) 
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -159,22 +173,32 @@ def produto_create(request):
                 return redirect('lista_produtos')
         else:
             form = ProdutoForm()
-        context = {
-            'fieldName' : [
-                #ListAction(id=1,formGen = FormCategoria, url_name='Categoria_create', name='categoria', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=2,url_name='Categoria_list', name='categoria', label='Visualizar', icon='fa fa-edit', cor='w3-blue'),
-                #ListAction(id=3,formGen = FormMarca, url_name='Marca_create', name='marca', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=4,url_name='Marca_list', name='marca', label='Visualizar', icon='fa fa-edit', cor='w3-blue'),
-                #ListAction(id=5,formGen = FormUnidade, url_name='Unidade_create', name='unidade', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=6,url_name='Unidade_list', name='unidade', label='Visualizar', icon='fa fa-edit', cor='w3-blue'),
-            ],
-        }
+        
+            user_profiles = UserProfile.objects.filter(user=request.user)
 
-        return render(request, 'generico/form.html', {'form': form, 'a': context, 'model_name':'Cadastro de Produto', 'ActionCancel': 'lista_produtos'})
+            # Verifique se o queryset está vazio
+            if user_profiles.exists():
+                UserProfiles = user_profiles.first()
+            else:
+                UserProfiles = None
+
+            context = {
+                'form': form,
+                'UserProfiles': UserProfiles,
+                'model_name':'Cadastro de Produto',
+                'ActionCancel': 'lista_produtos',
+                'fieldName' : [
+                    ListAction(id=2,url_name='Categoria_list', name='categoria', label='Visualizar', icon='fa fa-edit', cor='w3-blue'), 
+                    ListAction(id=4,url_name='Marca_list', name='marca', label='Visualizar', icon='fa fa-edit', cor='w3-blue'),  
+                    ListAction(id=6,url_name='Unidade_list', name='unidade', label='Visualizar', icon='fa fa-edit', cor='w3-blue'),
+                ],
+            }
+
+            return render(request, 'generico/form.html', context)
 
 
 @login_required
-@permission_required('produtos.change_produto')
+@permission_required('produtos.change_produto',raise_exception=True)
 def produto_edit(request, pk):
         produto = get_object_or_404(Produto, pk=pk)
         if request.method == 'POST':
@@ -195,22 +219,31 @@ def produto_edit(request, pk):
             return redirect('lista_produtos')
         else:
             form = ProdutoForm(instance=produto)
+            
+            user_profiles = UserProfile.objects.filter(user=request.user)
 
-        context = {
-            'fieldName' : [
-                #ListAction(id=1,formGen = FormCategoria, url_name='Categoria_create', name='categoria', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=2,url_name='Categoria_list', name='categoria', label='Visualizar', icon='fa fa-search', cor='w3-blue'),
-                #ListAction(id=3,formGen = FormMarca, url_name='Marca_create', name='marca', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=4,url_name='Marca_list', name='marca', label='visualizar', icon='fa fa-search', cor='w3-blue'),
-                #ListAction(id=5,formGen = FormUnidade, url_name='Unidade_create', name='unidade', label='Inserir', icon='fa fa-edit', cor='w3-blue'),    
-                ListAction(id=6,url_name='Unidade_list', name='unidade', label='visualizar', icon='fa fa-search', cor='w3-blue'),
-            ],
-        }
+            # Verifique se o queryset está vazio
+            if user_profiles.exists():
+                UserProfiles = user_profiles.first()
+            else:
+                UserProfiles = None
 
-        return render(request, 'generico/form.html', {'form': form, 'a': context, 'model_name':'Atualizar Produto', 'ActionCancel': 'lista_produtos'})
+            context = {
+                'form': form,
+                'UserProfiles': UserProfiles,
+                'model_name':'Atualizar Produto',
+                'ActionCancel': 'lista_produtos',
+                'fieldName' : [  
+                    ListAction(id=2,url_name='Categoria_list', name='categoria', label='Visualizar', icon='fa fa-search', cor='w3-blue'),  
+                    ListAction(id=4,url_name='Marca_list', name='marca', label='visualizar', icon='fa fa-search', cor='w3-blue'),    
+                    ListAction(id=6,url_name='Unidade_list', name='unidade', label='visualizar', icon='fa fa-search', cor='w3-blue'),
+                ],
+            }
+
+            return render(request, 'generico/form.html', context)
 
 @login_required
-@permission_required('produtos.delete_produto')
+@permission_required('produtos.delete_produto',raise_exception=True)
 def produto_delete(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     if request.method == 'POST':
@@ -218,11 +251,28 @@ def produto_delete(request, pk):
         return redirect('lista_produtos')
     else:
         form = ProdutoForm(instance=produto)
-    return render(request, 'generico/form_delete.html', {'form': form,'delete': produto, 'model_name':'Deletar Produto', 'ActionCancel': 'lista_produtos'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'delete': produto,
+            'model_name':'Deletar Produto',
+            'ActionCancel': 'lista_produtos',
+            'fieldName' : [],
+        }
+    return render(request, 'generico/form_delete.html', context)
 
 
 @login_required
-@permission_required('produtos.view_categoria')
+@permission_required('produtos.view_categoria',raise_exception=True)
 def Categoria_list(request):
 
     if request.GET.get("list"):
@@ -239,8 +289,17 @@ def Categoria_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
+
     context = {
         'model_name': 'Categoria',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Categoria_create', label='Adicionar Categoria', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -253,7 +312,7 @@ def Categoria_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required
-@permission_required('produtos.add_categoria')
+@permission_required('produtos.add_categoria',raise_exception=True)
 def Categoria_create(request):
     if request.method == 'POST':
         try:
@@ -272,10 +331,27 @@ def Categoria_create(request):
             return redirect('Categoria_list')
     else:
         form = CategoriaForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Categoria', 'ActionCancel': 'Categoria_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Categoria',
+            'ActionCancel': 'Categoria_list',
+            'fieldName' : [],
+        }
+
+    return render(request, 'generico/form.html', context)
 
 @login_required
-@permission_required('produtos.change_categoria')
+@permission_required('produtos.change_categoria',raise_exception=True)
 def Categoria_edit(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
@@ -296,20 +372,53 @@ def Categoria_edit(request, pk):
             return redirect('Categoria_list')
     else:
         form = CategoriaForm(instance=categoria)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Categoria', 'ActionCancel': 'Categoria_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+        
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Categoria',
+            'ActionCancel': 'Categoria_list',
+            'fieldName' : [],
+        }
+
+    return render(request, 'generico/form.html', context)
 
 @login_required
-@permission_required('produtos.delete_categoria')
+@permission_required('produtos.delete_categoria',raise_exception=True)
 def Categoria_delete(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
         categoria.delete()
         return redirect('Categoria_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': categoria, 'model_name':'Deletar Categoria', 'ActionCancel': 'Categoria_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+        
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': categoria, 
+            'model_name':'Deletar Categoria',
+            'ActionCancel': 'Categoria_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form_delete.html', context)
 
 @login_required    
-@permission_required('produtos.view_promocao')  
+@permission_required('produtos.view_promocao',raise_exception=True)  
 def Promocao_list(request):
 
     if request.GET.get("list") and request.GET.get("list").isdigit():
@@ -350,7 +459,7 @@ def Promocao_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_promocao') 
+@permission_required('produtos.add_promocao',raise_exception=True) 
 def Promocao_create(request):
     if request.method == 'POST':
         try:
@@ -389,7 +498,7 @@ def Promocao_create(request):
         return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_promocao') 
+@permission_required('produtos.change_promocao',raise_exception=True) 
 def Promocao_edit(request, pk):
     promocao = get_object_or_404(Promocao, pk=pk)
     if request.method == 'POST':
@@ -430,7 +539,7 @@ def Promocao_edit(request, pk):
         return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_promocao') 
+@permission_required('produtos.delete_promocao',raise_exception=True) 
 def Promocao_delete(request, pk):
     promocao = get_object_or_404(Promocao, pk=pk)
     if request.method == 'POST':
@@ -459,7 +568,7 @@ def Promocao_delete(request, pk):
     return render(request, 'generico/form_delete.html', context)
 
 @login_required    
-@permission_required('produtos.view_unidade') 
+@permission_required('produtos.view_unidade',raise_exception=True) 
 def Unidade_list(request):
 
     if request.GET.get("list"):
@@ -475,9 +584,18 @@ def Unidade_list(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
 
     context = {
         'model_name': 'Unidade',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Unidade_create', label='Adicionar Unidade', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -490,7 +608,7 @@ def Unidade_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_unidade') 
+@permission_required('produtos.add_unidade',raise_exception=True) 
 def Unidade_create(request):
     if request.method == 'POST':
         try:
@@ -509,10 +627,27 @@ def Unidade_create(request):
             return redirect('Unidade_list')
     else:
         form = UnidadeForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Unidade', 'ActionCancel': 'Unidade_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form, 
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Unidade',
+            'ActionCancel': 'Unidade_list',
+            'fieldName' : [],
+        }
+        
+    return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_unidade') 
+@permission_required('produtos.change_unidade',raise_exception=True) 
 def Unidade_edit(request, pk):
     unidade = get_object_or_404(Unidade, pk=pk)
     if request.method == 'POST':
@@ -533,22 +668,56 @@ def Unidade_edit(request, pk):
             return redirect('Unidade_list')
     else:
         form = UnidadeForm(instance=unidade)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Unidade', 'ActionCancel': 'Unidade_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form, 
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Unidade',
+            'ActionCancel': 'Unidade_list',
+            'fieldName' : [],
+        }
+
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_unidade') 
+@permission_required('produtos.delete_unidade',raise_exception=True) 
 def Unidade_delete(request, pk):
     unidade = get_object_or_404(Unidade, pk=pk)
     if request.method == 'POST':
         unidade.delete()
         return redirect('Unidade_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': unidade, 'model_name':'Deletar Unidade', 'ActionCancel': 'Unidade_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+        
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': unidade,
+            'model_name':'Deletar Unidade',
+            'ActionCancel': 'Unidade_list',
+            'fieldName' : [],
+        }
+
+        return render(request, 'generico/form_delete.html', context)
 
 
 
 @login_required    
-@permission_required('produtos.view_marca') 
+@permission_required('produtos.view_marca',raise_exception=True) 
 def Marca_list(request):
 
     if request.GET.get("list"):
@@ -565,8 +734,17 @@ def Marca_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
+
     context = {
         'model_name': 'Marca',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Marca_create', label='Adicionar Marca', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -579,7 +757,7 @@ def Marca_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_marca') 
+@permission_required('produtos.add_marca',raise_exception=True) 
 def Marca_create(request):
     if request.method == 'POST':
         try:
@@ -598,10 +776,27 @@ def Marca_create(request):
             return redirect('Marca_list')
     else:
         form = MarcaForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Marca', 'ActionCancel': 'Marca_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+        
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Marca',
+            'ActionCancel': 'Marca_list',
+            'fieldName' : [],
+        }
+
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_marca') 
+@permission_required('produtos.change_marca',raise_exception=True) 
 def Marca_edit(request, pk):
     marca = get_object_or_404(Marca, pk=pk)
     if request.method == 'POST':
@@ -622,111 +817,55 @@ def Marca_edit(request, pk):
             return redirect('Marca_list')
     else:
         form = MarcaForm(instance=marca)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Marca', 'ActionCancel': 'Marca_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Marca',
+            'ActionCancel': 'Marca_list',
+            'fieldName' : [],
+        }
+
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_marca') 
+@permission_required('produtos.delete_marca',raise_exception=True) 
 def Marca_delete(request, pk):
     marca = get_object_or_404(Marca, pk=pk)
     if request.method == 'POST':
         marca.delete()
         return redirect('Marca_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': marca, 'model_name':'Deletar Marca', 'ActionCancel': 'Marca_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None
+
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': marca,
+            'model_name':'Deletar Marca',
+            'ActionCancel': 'Marca_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form_delete.html', context)
 
 
 
 @login_required    
-@permission_required('produtos.view_cliente') 
-def Cliente_list(request):
-    
-    if request.GET.get("list"):
-        set_list_value_in_cache(int(request.GET.get("list")))
-
-        return redirect('lista_produtos')
-    
-    else:
-        Qtlist = get_list_value_from_cache()
-
-    model_list = Cliente.objects.all()
-    paginator = Paginator(model_list, Qtlist) 
-
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'model_name': 'Cliente',
-        'object_list': page_obj,
-        'ActionAdd': ListAction(url_name='Cliente_create', label='Adicionar Cliente', icon='fa fa-plus', cor='w3-green'),
-        'list_actions': [
-            ListAction(url_name='Cliente_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
-            ListAction(url_name='Cliente_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
-        ],
-        'column_titles' : [f.name for f in Cliente._meta.fields],
-        'get_attribute': get_attribute,
-    }
-    return render(request, 'generico/base_list.html', context)
-
-@login_required    
-@permission_required('produtos.add_cliente') 
-def Cliente_create(request):
-    if request.method == 'POST':
-        try:
-            form = ClienteForm(request.POST, request.FILES)
-            if form.is_valid():
-                try:
-                    form.save()
-                    messages.success(request, "Atualização realizada com sucesso!")
-                    return redirect('Cliente_list')
-                        
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Cliente_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Cliente_list')
-    else:
-        form = ClienteForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Cliente', 'ActionCancel': 'Cliente_list'})
-
-@login_required    
-@permission_required('produtos.change_cliente') 
-def Cliente_edit(request, pk):
-    cliente = get_object_or_404(Cliente, pk=pk)
-    if request.method == 'POST':
-        try:
-            form = ClienteForm(request.POST, request.FILES, instance=cliente)
-            if form.is_valid():
-                try:
-                    form.save()
-                    messages.success(request, "Atualização realizada com sucesso!")
-
-                    return redirect('Cliente_list')
-                            
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Cliente_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Cliente_list')
-    else:
-        form = ClienteForm(instance=cliente)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Cliente', 'ActionCancel': 'Cliente_list'})
-
-@login_required    
-@permission_required('produtos.delete_cliente') 
-def Cliente_delete(request, pk):
-    cliente = get_object_or_404(Cliente, pk=pk)
-    if request.method == 'POST':
-        cliente.delete()
-        return redirect('Cliente_list')
-    else:
-        return render(request, 'generico/form_delete.html', {'delete': cliente, 'model_name':'Deletar Cliente', 'ActionCancel': 'Cliente_list'})
-
-
-
-@login_required    
-@permission_required('produtos.view_fornecedor') 
+@permission_required('produtos.view_fornecedor',raise_exception=True) 
 def Fornecedor_list(request):
 
     if request.GET.get("list"):
@@ -766,7 +905,7 @@ def Fornecedor_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_fornecedor') 
+@permission_required('produtos.add_fornecedor',raise_exception=True) 
 def Fornecedor_create(request):
     if request.method == 'POST':
         try:
@@ -787,10 +926,27 @@ def Fornecedor_create(request):
             return redirect('Fornecedor_list')
     else:
         form = FornecedorForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Fornecedor', 'ActionCancel': 'Fornecedor_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Fornecedor',
+            'ActionCancel': 'Fornecedor_list',
+            'fieldName' : [],
+        }
+
+    return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_fornecedor') 
+@permission_required('produtos.change_fornecedor',raise_exception=True) 
 def Fornecedor_edit(request, pk):
     fornecedor = get_object_or_404(Fornecedor, pk=pk)
     if request.method == 'POST':
@@ -812,22 +968,55 @@ def Fornecedor_edit(request, pk):
         
     else:
         form = FornecedorForm(instance=fornecedor)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Fornecedor', 'ActionCancel': 'Fornecedor_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Fornecedor',
+            'ActionCancel': 'Fornecedor_list',
+            'fieldName' : [],
+        }
+        
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_fornecedor') 
+@permission_required('produtos.delete_fornecedor',raise_exception=True) 
 def Fornecedor_delete(request, pk):
     fornecedor = get_object_or_404(Fornecedor, pk=pk)
     if request.method == 'POST':
         fornecedor.delete()
         return redirect('Fornecedor_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': fornecedor, 'model_name':'Deletar Fornecedor', 'ActionCancel': 'Fornecedor_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': fornecedor,
+            'model_name':'Deletar Fornecedor',
+            'ActionCancel': 'Fornecedor_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form_delete.html', context)
 
 
 
 @login_required    
-@permission_required('produtos.view_funcionario') 
+@permission_required('produtos.view_funcionario',raise_exception=True) 
 def Funcionario_list(request):
 
     if request.GET.get("list"):
@@ -844,8 +1033,17 @@ def Funcionario_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
+
     context = {
         'model_name': 'Funcionario',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Funcionario_create', label='Adicionar Funcionario', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -858,7 +1056,7 @@ def Funcionario_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_funcionario') 
+@permission_required('produtos.add_funcionario',raise_exception=True) 
 def Funcionario_create(request):
     if request.method == 'POST':
         try:
@@ -879,10 +1077,26 @@ def Funcionario_create(request):
             return redirect('Funcionario_list')
     else:
         form = FuncionarioForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Funcionario', 'ActionCancel': 'Funcionario_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Funcionario',
+            'ActionCancel': 'Funcionario_list',
+            'fieldName' : [],
+        }
+    return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_funcionario') 
+@permission_required('produtos.change_funcionario',raise_exception=True) 
 def Funcionario_edit(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     if request.method == 'POST':
@@ -903,21 +1117,53 @@ def Funcionario_edit(request, pk):
             return redirect('Funcionario_list')
     else:
         form = FuncionarioForm(instance=funcionario)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Funcionario', 'ActionCancel': 'Funcionario_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Funcionario',
+            'ActionCancel': 'Funcionario_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_funcionario') 
+@permission_required('produtos.delete_funcionario',raise_exception=True) 
 def Funcionario_delete(request, pk):
     funcionario = get_object_or_404(Funcionario, pk=pk)
     if request.method == 'POST':
         funcionario.delete()
         return redirect('Funcionario_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': funcionario, 'model_name':'Deletar Funcionario', 'ActionCancel': 'Funcionario_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': funcionario,
+            'model_name':'Deletar Funcionario', 
+            'ActionCancel': 'Funcionario_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form_delete.html', context)
 
 
 @login_required    
-@permission_required('produtos.view_localizacao') 
+@permission_required('produtos.view_localizacao',raise_exception=True) 
 def Localizacao_list(request):
 
     if request.GET.get("list"):
@@ -934,8 +1180,17 @@ def Localizacao_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
+
     context = {
         'model_name': 'Localização',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='Localizacao_create', label='Adicionar Localização', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -948,7 +1203,7 @@ def Localizacao_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_localizacao') 
+@permission_required('produtos.add_localizacao',raise_exception=True) 
 def Localizacao_create(request):
     if request.method == 'POST':
         try:
@@ -968,10 +1223,26 @@ def Localizacao_create(request):
             return redirect('Localizacao_list')
     else:
         form = LocalizacaoForm()
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Cadastro de Localização', 'ActionCancel': 'Localizacao_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Cadastro de Localização', 
+            'ActionCancel': 'Localizacao_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.change_localizacao') 
+@permission_required('produtos.change_localizacao',raise_exception=True) 
 def Localizacao_edit(request, pk):
     localizacao = get_object_or_404(Localizacao, pk=pk)
     if request.method == 'POST':
@@ -992,10 +1263,26 @@ def Localizacao_edit(request, pk):
             return redirect('Localizacao_list')
     else:
         form = LocalizacaoForm(instance=localizacao)
-    return render(request, 'generico/form.html', {'form': form, 'model_name':'Atualizar Localização', 'ActionCancel': 'Localizacao_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Atualizar Localização', 
+            'ActionCancel': 'Localizacao_list',
+            'fieldName' : [],
+        }
+    return render(request, 'generico/form.html', context)
 
 @login_required    
-@permission_required('produtos.delete_localizacao') 
+@permission_required('produtos.delete_localizacao',raise_exception=True) 
 def Localizacao_delete(request, pk):
     localizacao = get_object_or_404(Localizacao, pk=pk)
     if request.method == 'POST':
@@ -1007,11 +1294,29 @@ def Localizacao_delete(request, pk):
             messages.warning(request, "Erro por favor tente novamente mais tarde!")
             return redirect('Localizacao_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': localizacao, 'model_name':'Deletar Localização', 'ActionCancel': 'Localizacao_list'})
+
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'UserProfiles': UserProfiles,
+            'delete': localizacao,
+            'model_name':'Deletar Localização', 
+            'ActionCancel': 'Localizacao_list',
+            'fieldName' : [],
+        }
+
+        return render(request, 'generico/form_delete.html', context)
 
 
 @login_required    
-@permission_required('produtos.view_ordemcompra') 
+@permission_required('produtos.view_ordemcompra',raise_exception=True) 
 def ordem_compra_list(request):
 
     if request.GET.get("list"):
@@ -1028,8 +1333,17 @@ def ordem_compra_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None
+
     context = {
         'model_name': 'Ordens de Compras',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='adicionar_ordem_compra', label='Adicionar Ordem de Compra', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -1042,7 +1356,7 @@ def ordem_compra_list(request):
     return render(request, 'generico/base_list.html', context)
 
 @login_required    
-@permission_required('produtos.add_ordemcompra') 
+@permission_required('produtos.add_ordemcompra',raise_exception=True) 
 def adicionar_ordem_compra(request, extra=None):
     if request.method == 'POST':
 
@@ -1077,10 +1391,28 @@ def adicionar_ordem_compra(request, extra=None):
         ExtraInclement = item_formset.extra + 1
         ExtraDeclement = item_formset.extra - 1
 
-        return render(request, 'generico/formCompras.html', {'form': ordem_compra_form, 'item_formset': item_formset,'ItensForms': Produto.objects.all(), 'ActionCancel': 'ordem_compra_list','ExtraInclement': ExtraInclement,'ExtraDeclement':ExtraDeclement})
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': ordem_compra_form,
+            'UserProfiles': UserProfiles, 
+            'item_formset': item_formset,
+            'ItensForms': Produto.objects.all(), 
+            'ActionCancel': 'ordem_compra_list',
+            'ExtraInclement': ExtraInclement,
+            'ExtraDeclement':ExtraDeclement
+        }
+
+        return render(request, 'generico/formCompras.html', context)
 
 @login_required    
-@permission_required('produtos.change_ordemcompra') 
+@permission_required('produtos.change_ordemcompra',raise_exception=True) 
 def editar_ordem_compra(request, pk, extra=None):
     ordem_compra = get_object_or_404(OrdemCompra, pk=pk)
 
@@ -1123,11 +1455,29 @@ def editar_ordem_compra(request, pk, extra=None):
         ExtraInclement = item_formset.extra + 1
         ExtraDeclement = item_formset.extra - 1
 
+        user_profiles = UserProfile.objects.filter(user=request.user)
 
-        return render(request, 'generico/formCompras_update.html', {'form': ordem_compra_form, 'item_formset': item_formset, 'ItensForms': Produto.objects.all(), 'ActionCancel': 'ordem_compra_list','ExtraInclement': ExtraInclement,'ExtraDeclement':ExtraDeclement, 'pk':pk})
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': ordem_compra_form, 
+            'UserProfiles': UserProfiles, 
+            'item_formset': item_formset, 
+            'ItensForms': Produto.objects.all(), 
+            'ActionCancel': 'ordem_compra_list',
+            'ExtraInclement': ExtraInclement,
+            'ExtraDeclement':ExtraDeclement, 
+            'pk':pk
+        }
+
+        return render(request, 'generico/formCompras_update.html', context)
 
 @login_required    
-@permission_required('produtos.delete_itemordemcompra') 
+@permission_required('produtos.delete_itemordemcompra',raise_exception=True) 
 def deletar_itemordem_compra(request, pk):
     ItemOrdemCompras = get_object_or_404(ItemOrdemCompra, pk=pk)
     ItemOrdemCompras.delete()
@@ -1135,7 +1485,7 @@ def deletar_itemordem_compra(request, pk):
     return redirect(back)
 
 @login_required    
-@permission_required('produtos.delete_ordemcompra') 
+@permission_required('produtos.delete_ordemcompra',raise_exception=True) 
 def deletar_ordem_compra(request, pk):
     ordem_compra = get_object_or_404(OrdemCompra, pk=pk)
     if request.method == 'POST':
@@ -1147,10 +1497,26 @@ def deletar_ordem_compra(request, pk):
             messages.warning(request, "Erro por favor tente novamente mais tarde!")
             return redirect('ordem_compra_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': ordem_compra, 'model_name':'Deletar Ordem de Compra', 'ActionCancel': 'ordem_compra_list'})
+        
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'delete': ordem_compra, 
+            'UserProfiles': UserProfiles,
+            'model_name':'Deletar Ordem de Compra', 
+            'ActionCancel': 'ordem_compra_list'
+        }
+
+        return render(request, 'generico/form_delete.html', context)
 
 @login_required    
-@permission_required('produtos.view_ordemvenda') 
+@permission_required('produtos.view_ordemvenda',raise_exception=True) 
 def ordem_venda_list(request):
 
     if request.GET.get("list"):
@@ -1167,8 +1533,17 @@ def ordem_venda_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+
     context = {
         'model_name': 'Ordens de Venda',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
         'ActionAdd': ListAction(url_name='adicionar_ordem_venda', label='Adicionar Ordem de Venda', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
@@ -1181,7 +1556,7 @@ def ordem_venda_list(request):
     return render(request, 'generico/base_list.html',  context)
 
 @login_required    
-@permission_required('produtos.add_ordemvenda') 
+@permission_required('produtos.add_ordemvenda',raise_exception=True) 
 def adicionar_ordem_venda(request, extra=None):
     if request.method == 'POST':
 
@@ -1216,10 +1591,28 @@ def adicionar_ordem_venda(request, extra=None):
         ExtraInclement = item_formset.extra + 1
         ExtraDeclement = item_formset.extra - 1
 
-        return render(request, 'generico/formVenda.html', {'form': ordem_venda_form, 'item_formset': item_formset,'ItensForms': Produto.objects.all(), 'ActionCancel': 'ordem_venda_list', 'model_name':'Ordens de Vendas','ExtraInclement': ExtraInclement,'ExtraDeclement':ExtraDeclement})
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': ordem_venda_form, 
+            'UserProfiles': UserProfiles,
+            'item_formset': item_formset,
+            'ItensForms': Produto.objects.all(), 
+            'ActionCancel': 'ordem_venda_list', 
+            'model_name':'Ordens de Vendas',
+            'ExtraInclement': ExtraInclement,
+            'ExtraDeclement':ExtraDeclement
+        }
+        return render(request, 'generico/formVenda.html', context)
 
 @login_required    
-@permission_required('produtos.change_ordemvenda') 
+@permission_required('produtos.change_ordemvenda',raise_exception=True) 
 def editar_ordem_venda(request, pk, extra=None):
     ordem_venda = get_object_or_404(OrdemVenda, pk=pk)
 
@@ -1261,11 +1654,30 @@ def editar_ordem_venda(request, pk, extra=None):
         ExtraInclement = item_formset.extra + 1
         ExtraDeclement = item_formset.extra - 1
 
+        user_profiles = UserProfile.objects.filter(user=request.user)
 
-        return render(request, 'generico/formVenda_update.html', {'form': ordem_venda_form, 'item_formset': item_formset, 'ItensForms': Produto.objects.all(), 'ActionCancel': 'ordem_venda_list', 'model_name':'Ordens de Vendas','ExtraInclement': ExtraInclement,'ExtraDeclement':ExtraDeclement, 'pk':pk})
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': ordem_venda_form, 
+            'UserProfiles': UserProfiles,
+            'item_formset': item_formset, 
+            'ItensForms': Produto.objects.all(), 
+            'ActionCancel': 'ordem_venda_list', 
+            'model_name':'Ordens de Vendas',
+            'ExtraInclement': ExtraInclement,
+            'ExtraDeclement':ExtraDeclement, 
+            'pk':pk
+        }
+
+        return render(request, 'generico/formVenda_update.html', context)
 
 @login_required    
-@permission_required('produtos.delete_itemordemvenda') 
+@permission_required('produtos.delete_itemordemvenda',raise_exception=True) 
 def deletar_itemordem_venda(request, pk):
     ItemOrdemVendas = get_object_or_404(ItemOrdemVenda, pk=pk)
     ItemOrdemVendas.delete()
@@ -1273,7 +1685,7 @@ def deletar_itemordem_venda(request, pk):
     return redirect(back)
 
 @login_required    
-@permission_required('produtos.delete_ordemvenda') 
+@permission_required('produtos.delete_ordemvenda',raise_exception=True) 
 def deletar_ordem_venda(request, pk):
     OrdemVendas = get_object_or_404(OrdemVenda, pk=pk)
     if request.method == 'POST':
@@ -1285,11 +1697,26 @@ def deletar_ordem_venda(request, pk):
             messages.warning(request, "Erro por favor tente novamente mais tarde!")
             return redirect('ordem_compra_list')
     else:
-        return render(request, 'generico/form_delete.html', {'delete': OrdemVendas, 'model_name':'Deletar Ordem de Venda', 'ActionCancel': 'ordem_venda_list'})
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'delete': OrdemVendas, 
+            'UserProfiles': UserProfiles,
+            'model_name':'Deletar Ordem de Venda', 
+            'ActionCancel': 'ordem_venda_list'
+        }
+        return render(request, 'generico/form_delete.html', context)
 
 
 @login_required    
-@permission_required('produtos.view_configuracaosistema') 
+@permission_required('produtos.view_configuracaosistema',raise_exception=True) 
 def configuracao_sistema_list(request):
 
     if request.GET.get("list"):
@@ -1305,12 +1732,24 @@ def configuracao_sistema_list(request):
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+    
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+
 
     context = {
         'model_name': 'Configuração de Sistema',
+        'UserProfiles': UserProfiles,
         'object_list': page_obj,
+        'ActionAdd': ListAction(url_name='adicionar_configuracao_sistema', label='adicionar configuração sistema', icon='fa fa-plus', cor='w3-green'),
         'list_actions': [
             ListAction(url_name='editar_configuracao_sistema', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
+            ListAction(url_name='deletar_configuracao_sistema', label='Delete', icon='fa fa-trash', cor='w3-blue'),
         ],
         'column_titles' : [f.name for f in ConfiguracaoSistema._meta.fields],
         'get_attribute': get_attribute,
@@ -1318,7 +1757,7 @@ def configuracao_sistema_list(request):
     return render(request, 'generico/base_list.html',  context)
 
 @login_required    
-@permission_required('produtos.change_configuracaosistema')
+@permission_required('produtos.change_configuracaosistema',raise_exception=True)
 def editar_configuracao_sistema(request, pk):
     configuracao = get_object_or_404(ConfiguracaoSistema, pk=pk)
     if request.method == 'POST':
@@ -1338,30 +1777,88 @@ def editar_configuracao_sistema(request, pk):
             return redirect('ordem_compra_list')
     else:
         ConfiguracaoSistema_form = ConfiguracaoSistemaForm(instance=configuracao)
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
         context = {
+            'form': ConfiguracaoSistema_form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Configuração de Sistema', 
+            'ActionCancel': 'configuracao_sistema_list',
             'fieldName' : [],
         }
-
-
-    return render(request, 'generico/form.html', {'form': ConfiguracaoSistema_form, 'a': context, 'model_name':'Configuração de Sistema', 'ActionCancel': 'configuracao_sistema_list'})
-
-# def deletar_configuracao_sistema(request, pk):
-#     configuracao = get_object_or_404(ConfiguracaoSistema, pk=pk)
-#     configuracao.delete()
-#     return redirect('configuracao_sistema_list')
-
-# def adicionar_configuracao_sistema(request):
-#     if request.method == 'POST':
-#         form = ConfiguracaoSistemaForm(request.POST)
         
-#         if form.is_valid():
-#             form.save()
-#             return redirect('configuracao_sistema_list')
-#     else:
-#         form = ConfiguracaoSistemaForm()
-#         context = {
-#             'fieldName' : [],
-#         }
 
-#     return render(request, 'generico/form.html', {'form': form, 'a': context, 'model_name':'Configuracao do Sistema', 'ActionCancel': 'lista_produtos'})
+    return render(request, 'generico/form.html', context)
+
+def deletar_configuracao_sistema(request, pk):
+    configuracao = get_object_or_404(ConfiguracaoSistema, pk=pk)
+    if request.method == 'POST':
+        try:
+            configuracao.delete()
+            messages.success(request, "Exclusão realizada com sucesso!")
+            return redirect('configuracao_sistema_list')
+        except Exception as e:
+            messages.warning(request, "Erro por favor tente novamente mais tarde!")
+            return redirect('configuracao_sistema_list')
+    else:
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'delete': configuracao, 
+            'UserProfiles': UserProfiles,
+            'model_name':'Deletar Configuração de Sistema', 
+            'ActionCancel': 'configuracao_sistema_list'
+        }
+        return render(request, 'generico/form_delete.html', context)
+
+def adicionar_configuracao_sistema(request):
+    if request.method == 'POST':
+        try:
+            form = ConfiguracaoSistemaForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    form.save()
+                    messages.success(request, "Atualização realizada com sucesso!")
+
+                    return redirect('configuracao_sistema_list')
+                        
+                except Exception as e:
+                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
+                    return redirect('configuracao_sistema_list')
+        except Exception as e:
+            messages.warning(request, "Erro por favor tente novamente mais tarde!")
+            return redirect('configuracao_sistema_list')
+    else:
+        form = ConfiguracaoSistemaForm()
+
+        user_profiles = UserProfile.objects.filter(user=request.user)
+
+        # Verifique se o queryset está vazio
+        if user_profiles.exists():
+            UserProfiles = user_profiles.first()
+        else:
+            UserProfiles = None 
+
+        context = {
+            'form': form,
+            'UserProfiles': UserProfiles,
+            'model_name':'Configuracao do Sistema', 
+            'ActionCancel': 'configuracao_sistema_list',
+            'fieldName' : [],
+        }
+        return render(request, 'generico/form.html', context)
 
