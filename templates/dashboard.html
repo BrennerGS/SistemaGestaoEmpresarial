@@ -3,6 +3,8 @@
 {% block content %}
 
 <div class="row">
+
+    {% if perms.produtos.view_funcionario %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
@@ -17,7 +19,9 @@
         <a href="{% url 'Funcionario_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    {% endif %}
     <!-- ./col -->
+    {% if perms.produtos.view_fornecedor %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box" style="background-color: #0d5c81; color: #ffffff;">
@@ -32,7 +36,9 @@
         <a href="{% url 'Fornecedor_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    {% endif %}
     <!-- ./col -->
+    {% if perms.Cliente.view_cliente %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box" style="background-color: #17abf0; color: #ffffff;">
@@ -47,7 +53,9 @@
         <a href="{% url 'Cliente_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    {% endif %}
     <!-- ./col -->
+    {% if perms.produtos.view_produto %}
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box" style="background-color: #478eaf; color: #ffffff;">
@@ -62,8 +70,9 @@
         <a href="{% url 'lista_produtos' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    {% endif %}
     <!-- ./col -->
-
+    {% if perms.produtos.view_ordemcompra %}
 
     <div class="col-lg-3 col-6">
         <!-- small box -->
@@ -79,7 +88,9 @@
           <a href="{% url 'ordem_compra_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
+      {% endif %}
       <!-- ./col -->
+      {% if perms.produtos.view_ordemvenda %}
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box" style="background-color: #164ea1; color: #ffffff;">
@@ -94,7 +105,9 @@
           <a href="{% url 'ordem_venda_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
+      {% endif %}
       <!-- ./col -->
+      {% if perms.produtos.view_configuracaosistema %}
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
@@ -109,7 +122,9 @@
           <a href="{% url 'configuracao_sistema_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
+      {% endif %}
       <!-- ./col -->
+      {% if perms.produtos.view_promocao %}
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
@@ -124,8 +139,9 @@
           <a href="{% url 'Promocao_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
-
+      {% endif %}
       <!-- ./col -->
+      {% if perms.produtos.view_categoria %}
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box" style="background-color: #4283a1; color: #ffffff;">
@@ -140,6 +156,7 @@
           <a href="{% url 'Categoria_list' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
         </div>
       </div>
+      {% endif %}
       
   </div>
 
