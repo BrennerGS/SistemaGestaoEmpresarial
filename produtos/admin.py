@@ -29,17 +29,17 @@ class UnidadeAdmin(admin.ModelAdmin):
     list_display = ('nome',)
     search_fields = ('nome',)
 
-class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'telefone', 'email',)
-    search_fields = ('nome', 'telefone', 'email',)
+# class ClienteAdmin(admin.ModelAdmin):
+#     list_display = ('nome', 'telefone', 'email',)
+#     search_fields = ('nome', 'telefone', 'email',)
 
-class FornecedorAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'email',)
-    search_fields = ('nome', 'email', 'email',)
+# class FornecedorAdmin(admin.ModelAdmin):
+#     list_display = ('nome', 'email', 'email',)
+#     search_fields = ('nome', 'email', 'email',)
 
-class FuncionarioAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep',)
-    search_fields = ('nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep',)
+# class FuncionarioAdmin(admin.ModelAdmin):
+#     list_display = ('nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep',)
+#     search_fields = ('nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep',)
 
 class LocalizacaoAdmin(admin.ModelAdmin):
     list_display = ('nome', 'descricao',)
@@ -51,9 +51,9 @@ admin.site.register(Categoria, CategoriaAdmin)
 admin.site.register(Promocao, PromocaoAdmin)
 admin.site.register(Marca, MarcaAdmin)
 admin.site.register(Unidade, UnidadeAdmin)
-admin.site.register(Cliente,ClienteAdmin)
-admin.site.register(Fornecedor,FornecedorAdmin)
-admin.site.register(Funcionario, FuncionarioAdmin)
+# admin.site.register(Cliente,ClienteAdmin)
+# admin.site.register(Fornecedor,FornecedorAdmin)
+# admin.site.register(Funcionario, FuncionarioAdmin)
 admin.site.register(Localizacao, LocalizacaoAdmin)
 
 class ItemOrdemCompraInline(admin.TabularInline):

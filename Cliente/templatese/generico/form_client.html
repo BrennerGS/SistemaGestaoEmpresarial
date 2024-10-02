@@ -1,0 +1,80 @@
+{% extends 'base_teste.html' %}
+
+{% block content %}
+{% load custom_filters %}
+
+<style>
+    .form-group {
+        display: inline-block;
+        width: 30%;
+        /* Define a largura de cada campo */
+        margin-right: 2%;
+        /* Adiciona um espaço entre os campos */
+    }
+</style>
+
+<!-- jquery validation -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ model_name }}</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form id="quickForm" action="" method="POST" enctype="multipart/form-data">
+        <div class="card-body">
+            {% csrf_token %}
+            {% for field in form %}
+            {% if field.label != 'Descricao' %}
+            <div class="form-group">
+            {% else%}
+            
+            {% endif %}
+                    
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+                {% for action in a.fieldName %}
+                    {% if field.name == action.name %}
+                    {% if action %}
+                    <a class="btn btn-outline-secondary" style="margin: 5px; font-size: 10px; " {% if not action.formGen %}
+                        onclick="myFunction('{% url action.url_name %}');" {% else %} data-bs-toggle="offcanvas"
+                        data-bs-target="#OpenModal{{ action.id }}" {% endif %}>
+                        {{ action.label }}
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if field.widget.input_type != 'checkbox' %}
+                {{ field }}
+                <script>
+                    document.getElementById("{{ field.id_for_label }}").classList.add("form-control");
+                </script>
+                {% else %}
+                {{ field }}
+                {% endif %}
+            </div>
+            {% if field.label == 'Imagem' %}
+        </div>
+        <div class="card-body">
+            {% endif %}
+            {% if forloop.counter|divisibleby:3 and field.label != 'Descricao' %}
+            <!-- Fecha a linha a cada 3 campos, exceto para o campo de descrição -->
+        </div>
+        <div class="card-body">
+            {% endif %}
+            {% endfor %}
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function myFunction(url) {
+        window.open(url, "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=1, left=1, width=800, height=600");
+    }
+</script>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
-from .models import Produto, Cliente, Fornecedor, Funcionario, Categoria, Marca, Unidade, Localizacao #, OrdemCompra, OrdemVenda, RelatorioVendas, RelatorioEstoque, RelatorioFornecedores, Usuario, Permissao, Configuracao, IntegracaoApi, IntegracaoComercioEletronico, IntegracaoPagamento, IntegracaoEnvio, IntegracaoMarketing, IntegracaoCrm, IntegracaoIntegraçãoDados
-from .models import *
+from .models import ConfiguracaoSistema, ItemOrdemCompra, ItemOrdemVenda, OrdemCompra, OrdemVenda, Produto, Categoria, Marca, Promocao, Unidade, Localizacao #, OrdemCompra, OrdemVenda, RelatorioVendas, RelatorioEstoque, RelatorioFornecedores, Usuario, Permissao, Configuracao, IntegracaoApi, IntegracaoComercioEletronico, IntegracaoPagamento, IntegracaoEnvio, IntegracaoMarketing, IntegracaoCrm, IntegracaoIntegraçãoDados
+
 from django.forms import inlineformset_factory
 
 class ProdutoForm(forms.ModelForm):
@@ -14,20 +14,20 @@ class PromocaoForm(forms.ModelForm):
         fields = ['produto', 'data_inicio', 'data_fim', 'desconto', 'status']
 
 
-class ClienteForm(forms.ModelForm):
-    class Meta:
-        model = Cliente
-        fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
+# class ClienteForm(forms.ModelForm):
+#     class Meta:
+#         model = Cliente
+#         fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
 
-class FornecedorForm(forms.ModelForm):
-    class Meta:
-        model = Fornecedor
-        fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
+# class FornecedorForm(forms.ModelForm):
+#     class Meta:
+#         model = Fornecedor
+#         fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
 
-class FuncionarioForm(forms.ModelForm):
-    class Meta:
-        model = Funcionario
-        fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
+# class FuncionarioForm(forms.ModelForm):
+#     class Meta:
+#         model = Funcionario
+#         fields = ['nome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'cep']
 
 class CategoriaForm(forms.ModelForm):
     class Meta:

@@ -32,15 +32,15 @@ urlpatterns = [
      path('Marca/edit/<int:pk>', Marca_edit, name='Marca_edit'),
      path('Marca/delete/<int:pk>', Marca_delete, name='Marca_delete'),
 
-     path('Fornecedor/', Fornecedor_list, name='Fornecedor_list'),
-     path('Fornecedor/create', Fornecedor_create, name='Fornecedor_create'),
-     path('Fornecedor/edit/<int:pk>', Fornecedor_edit, name='Fornecedor_edit'),
-     path('Fornecedor/delete/<int:pk>', Fornecedor_delete, name='Fornecedor_delete'),
+     # path('Fornecedor/', Fornecedor_list, name='Fornecedor_list'),
+     # path('Fornecedor/create', Fornecedor_create, name='Fornecedor_create'),
+     # path('Fornecedor/edit/<int:pk>', Fornecedor_edit, name='Fornecedor_edit'),
+     # path('Fornecedor/delete/<int:pk>', Fornecedor_delete, name='Fornecedor_delete'),
 
-     path('Funcionario/', Funcionario_list, name='Funcionario_list'),
-     path('Funcionario/create', Funcionario_create, name='Funcionario_create'),
-     path('Funcionario/edit/<int:pk>', Funcionario_edit, name='Funcionario_edit'),
-     path('Funcionario/delete/<int:pk>', Funcionario_delete, name='Funcionario_delete'),
+     # path('Funcionario/', Funcionario_list, name='Funcionario_list'),
+     # path('Funcionario/create', Funcionario_create, name='Funcionario_create'),
+     # path('Funcionario/edit/<int:pk>', Funcionario_edit, name='Funcionario_edit'),
+     # path('Funcionario/delete/<int:pk>', Funcionario_delete, name='Funcionario_delete'),
 
      path('Localizacao/', Localizacao_list, name='Localizacao_list'),
      path('Localizacao/create', Localizacao_create, name='Localizacao_create'),

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from Fornecedor.models import Fornecedor
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     imagem = models.ImageField(upload_to='user_image/', default='user_image/img_avatar1.png', null=True, blank=True)
@@ -50,49 +52,49 @@ class Unidade(models.Model):
     def __str__(self):
         return f"{self.nome}"
 
-class Cliente(models.Model):
-    nome = models.CharField(max_length=255)
-    email = models.EmailField()
-    telefone = models.CharField(max_length=20)
-    endereco = models.CharField(max_length=255)
-    cidade = models.CharField(max_length=255)
-    estado = models.CharField(max_length=2)
-    cep = models.CharField(max_length=8)
+# class Cliente(models.Model):
+#     nome = models.CharField(max_length=255)
+#     email = models.EmailField()
+#     telefone = models.CharField(max_length=20)
+#     endereco = models.CharField(max_length=255)
+#     cidade = models.CharField(max_length=255)
+#     estado = models.CharField(max_length=2)
+#     cep = models.CharField(max_length=8)
     
-    def __str__(self):
-        return f"{self.nome}"
+#     def __str__(self):
+#         return f"{self.nome}"
 
-class Fornecedor(models.Model):
-    nome = models.CharField(max_length=255)
-    email = models.EmailField()
-    telefone = models.CharField(max_length=20)
-    endereco = models.CharField(max_length=255)
-    cidade = models.CharField(max_length=255)
-    estado = models.CharField(max_length=2)
-    cep = models.CharField(max_length=8)
+# class Fornecedor(models.Model):
+#     nome = models.CharField(max_length=255)
+#     email = models.EmailField()
+#     telefone = models.CharField(max_length=20)
+#     endereco = models.CharField(max_length=255)
+#     cidade = models.CharField(max_length=255)
+#     estado = models.CharField(max_length=2)
+#     cep = models.CharField(max_length=8)
 
-    class Meta:
-        verbose_name = 'Fornecedor'
-        verbose_name_plural = 'Fornecedores'
+#     class Meta:
+#         verbose_name = 'Fornecedor'
+#         verbose_name_plural = 'Fornecedores'
     
-    def __str__(self):
-        return f"{self.nome}"
+#     def __str__(self):
+#         return f"{self.nome}"
 
-class Funcionario(models.Model):
-    nome = models.CharField(max_length=255)
-    email = models.EmailField()
-    telefone = models.CharField(max_length=20)
-    endereco = models.CharField(max_length=255)
-    cidade = models.CharField(max_length=255)
-    estado = models.CharField(max_length=2)
-    cep = models.CharField(max_length=8)
+# class Funcionario(models.Model):
+#     nome = models.CharField(max_length=255)
+#     email = models.EmailField()
+#     telefone = models.CharField(max_length=20)
+#     endereco = models.CharField(max_length=255)
+#     cidade = models.CharField(max_length=255)
+#     estado = models.CharField(max_length=2)
+#     cep = models.CharField(max_length=8)
     
-    class Meta:
-        verbose_name = 'Funcionario'
-        verbose_name_plural = 'Funcionarios'
+#     class Meta:
+#         verbose_name = 'Funcionario'
+#         verbose_name_plural = 'Funcionarios'
     
-    def __str__(self):
-        return f"{self.nome}"
+#     def __str__(self):
+#         return f"{self.nome}"
 
 class Localizacao(models.Model):
     nome = models.CharField(max_length=255)
@@ -106,7 +108,7 @@ class Localizacao(models.Model):
         return f"{self.nome}"
 
 class OrdemCompra(models.Model):
-    fornecedor = models.ForeignKey('Fornecedor', on_delete=models.CASCADE)
+    fornecedor = models.ForeignKey('Fornecedor.Fornecedor', on_delete=models.CASCADE)
     produtos = models.ManyToManyField('Produto', through='ItemOrdemCompra')
     data_emissao = models.DateField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
@@ -133,7 +135,7 @@ class ItemOrdemCompra(models.Model):
         return f"{self.produto}"
 
 class OrdemVenda(models.Model):
-    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE)
+    cliente = models.ForeignKey('Cliente.Cliente', on_delete=models.CASCADE)
     produtos = models.ManyToManyField('Produto', through='ItemOrdemVenda')
     data_emissao = models.DateField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)

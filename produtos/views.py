@@ -904,262 +904,262 @@ def Fornecedor_list(request):
     }
     return render(request, 'generico/base_list.html', context)
 
-@login_required    
-@permission_required('produtos.add_fornecedor',raise_exception=True) 
-def Fornecedor_create(request):
-    if request.method == 'POST':
-        try:
-            form = FornecedorForm(request.POST, request.FILES)
-            if form.is_valid():
-                try:
-                    form.save()
+# @login_required    
+# @permission_required('produtos.add_fornecedor',raise_exception=True) 
+# def Fornecedor_create(request):
+#     if request.method == 'POST':
+#         try:
+#             form = FornecedorForm(request.POST, request.FILES)
+#             if form.is_valid():
+#                 try:
+#                     form.save()
             
-                    messages.success(request, "Atualização realizada com sucesso!")
+#                     messages.success(request, "Atualização realizada com sucesso!")
 
-                    return redirect('Fornecedor_list')
+#                     return redirect('Fornecedor_list')
                         
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Fornecedor_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Fornecedor_list')
-    else:
-        form = FornecedorForm()
+#                 except Exception as e:
+#                     messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
+#                     return redirect('Fornecedor_list')
+#         except Exception as e:
+#             messages.warning(request, "Erro por favor tente novamente mais tarde!")
+#             return redirect('Fornecedor_list')
+#     else:
+#         form = FornecedorForm()
 
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'form': form,
-            'UserProfiles': UserProfiles,
-            'model_name':'Cadastro de Fornecedor',
-            'ActionCancel': 'Fornecedor_list',
-            'fieldName' : [],
-        }
+#         context = {
+#             'form': form,
+#             'UserProfiles': UserProfiles,
+#             'model_name':'Cadastro de Fornecedor',
+#             'ActionCancel': 'Fornecedor_list',
+#             'fieldName' : [],
+#         }
 
-    return render(request, 'generico/form.html', context)
+#     return render(request, 'generico/form.html', context)
 
-@login_required    
-@permission_required('produtos.change_fornecedor',raise_exception=True) 
-def Fornecedor_edit(request, pk):
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    if request.method == 'POST':
-        try:    
-            form = FornecedorForm(request.POST, request.FILES, instance=fornecedor)
-            if form.is_valid():
-                try:
-                    form.save()
-                    messages.success(request, "Atualização realizada com sucesso!")
+# @login_required    
+# @permission_required('produtos.change_fornecedor',raise_exception=True) 
+# def Fornecedor_edit(request, pk):
+#     fornecedor = get_object_or_404(Fornecedor, pk=pk)
+#     if request.method == 'POST':
+#         try:    
+#             form = FornecedorForm(request.POST, request.FILES, instance=fornecedor)
+#             if form.is_valid():
+#                 try:
+#                     form.save()
+#                     messages.success(request, "Atualização realizada com sucesso!")
 
-                    return redirect('Fornecedor_list')
+#                     return redirect('Fornecedor_list')
                             
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Fornecedor_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Fornecedor_list')
+#                 except Exception as e:
+#                     messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
+#                     return redirect('Fornecedor_list')
+#         except Exception as e:
+#             messages.warning(request, "Erro por favor tente novamente mais tarde!")
+#             return redirect('Fornecedor_list')
         
-    else:
-        form = FornecedorForm(instance=fornecedor)
+#     else:
+#         form = FornecedorForm(instance=fornecedor)
         
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'form': form,
-            'UserProfiles': UserProfiles,
-            'model_name':'Atualizar Fornecedor',
-            'ActionCancel': 'Fornecedor_list',
-            'fieldName' : [],
-        }
+#         context = {
+#             'form': form,
+#             'UserProfiles': UserProfiles,
+#             'model_name':'Atualizar Fornecedor',
+#             'ActionCancel': 'Fornecedor_list',
+#             'fieldName' : [],
+#         }
         
-        return render(request, 'generico/form.html', context)
+#         return render(request, 'generico/form.html', context)
 
-@login_required    
-@permission_required('produtos.delete_fornecedor',raise_exception=True) 
-def Fornecedor_delete(request, pk):
-    fornecedor = get_object_or_404(Fornecedor, pk=pk)
-    if request.method == 'POST':
-        fornecedor.delete()
-        return redirect('Fornecedor_list')
-    else:
+# @login_required    
+# @permission_required('produtos.delete_fornecedor',raise_exception=True) 
+# def Fornecedor_delete(request, pk):
+#     fornecedor = get_object_or_404(Fornecedor, pk=pk)
+#     if request.method == 'POST':
+#         fornecedor.delete()
+#         return redirect('Fornecedor_list')
+#     else:
         
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'UserProfiles': UserProfiles,
-            'delete': fornecedor,
-            'model_name':'Deletar Fornecedor',
-            'ActionCancel': 'Fornecedor_list',
-            'fieldName' : [],
-        }
-        return render(request, 'generico/form_delete.html', context)
+#         context = {
+#             'UserProfiles': UserProfiles,
+#             'delete': fornecedor,
+#             'model_name':'Deletar Fornecedor',
+#             'ActionCancel': 'Fornecedor_list',
+#             'fieldName' : [],
+#         }
+#         return render(request, 'generico/form_delete.html', context)
 
 
 
-@login_required    
-@permission_required('produtos.view_funcionario',raise_exception=True) 
-def Funcionario_list(request):
+# @login_required    
+# @permission_required('produtos.view_funcionario',raise_exception=True) 
+# def Funcionario_list(request):
 
-    if request.GET.get("list"):
-        set_list_value_in_cache(int(request.GET.get("list")))
+#     if request.GET.get("list"):
+#         set_list_value_in_cache(int(request.GET.get("list")))
 
-        return redirect('Funcionario_list')
+#         return redirect('Funcionario_list')
     
-    else:
-        Qtlist = get_list_value_from_cache()
+#     else:
+#         Qtlist = get_list_value_from_cache()
 
-    model_list = Funcionario.objects.all()
-    paginator = Paginator(model_list, Qtlist) 
+#     model_list = Funcionario.objects.all()
+#     paginator = Paginator(model_list, Qtlist) 
 
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
 
-    user_profiles = UserProfile.objects.filter(user=request.user)
+#     user_profiles = UserProfile.objects.filter(user=request.user)
 
-    # Verifique se o queryset está vazio
-    if user_profiles.exists():
-        UserProfiles = user_profiles.first()
-    else:
-        UserProfiles = None
+#     # Verifique se o queryset está vazio
+#     if user_profiles.exists():
+#         UserProfiles = user_profiles.first()
+#     else:
+#         UserProfiles = None
 
-    context = {
-        'model_name': 'Funcionario',
-        'UserProfiles': UserProfiles,
-        'object_list': page_obj,
-        'ActionAdd': ListAction(url_name='Funcionario_create', label='Adicionar Funcionario', icon='fa fa-plus', cor='w3-green'),
-        'list_actions': [
-            ListAction(url_name='Funcionario_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
-            ListAction(url_name='Funcionario_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
-        ],
-        'column_titles' : [f.name for f in Funcionario._meta.fields],
-        'get_attribute': get_attribute,
-    }
-    return render(request, 'generico/base_list.html', context)
+#     context = {
+#         'model_name': 'Funcionario',
+#         'UserProfiles': UserProfiles,
+#         'object_list': page_obj,
+#         'ActionAdd': ListAction(url_name='Funcionario_create', label='Adicionar Funcionario', icon='fa fa-plus', cor='w3-green'),
+#         'list_actions': [
+#             ListAction(url_name='Funcionario_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
+#             ListAction(url_name='Funcionario_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
+#         ],
+#         'column_titles' : [f.name for f in Funcionario._meta.fields],
+#         'get_attribute': get_attribute,
+#     }
+#     return render(request, 'generico/base_list.html', context)
 
-@login_required    
-@permission_required('produtos.add_funcionario',raise_exception=True) 
-def Funcionario_create(request):
-    if request.method == 'POST':
-        try:
-            form = FuncionarioForm(request.POST, request.FILES)
+# @login_required    
+# @permission_required('produtos.add_funcionario',raise_exception=True) 
+# def Funcionario_create(request):
+#     if request.method == 'POST':
+#         try:
+#             form = FuncionarioForm(request.POST, request.FILES)
             
-            if form.is_valid():
-                try:
-                    form.save()
-                    messages.success(request, "Atualização realizada com sucesso!")
+#             if form.is_valid():
+#                 try:
+#                     form.save()
+#                     messages.success(request, "Atualização realizada com sucesso!")
 
-                    return redirect('Funcionario_list')
+#                     return redirect('Funcionario_list')
                         
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Funcionario_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Funcionario_list')
-    else:
-        form = FuncionarioForm()
+#                 except Exception as e:
+#                     messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
+#                     return redirect('Funcionario_list')
+#         except Exception as e:
+#             messages.warning(request, "Erro por favor tente novamente mais tarde!")
+#             return redirect('Funcionario_list')
+#     else:
+#         form = FuncionarioForm()
         
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'form': form,
-            'UserProfiles': UserProfiles,
-            'model_name':'Cadastro de Funcionario',
-            'ActionCancel': 'Funcionario_list',
-            'fieldName' : [],
-        }
-    return render(request, 'generico/form.html', context)
+#         context = {
+#             'form': form,
+#             'UserProfiles': UserProfiles,
+#             'model_name':'Cadastro de Funcionario',
+#             'ActionCancel': 'Funcionario_list',
+#             'fieldName' : [],
+#         }
+#     return render(request, 'generico/form.html', context)
 
-@login_required    
-@permission_required('produtos.change_funcionario',raise_exception=True) 
-def Funcionario_edit(request, pk):
-    funcionario = get_object_or_404(Funcionario, pk=pk)
-    if request.method == 'POST':
-        try:
-            form = FuncionarioForm(request.POST, request.FILES, instance=funcionario)
-            if form.is_valid():
-                try:
-                    form.save()
-                    messages.success(request, "Atualização realizada com sucesso!")
+# @login_required    
+# @permission_required('produtos.change_funcionario',raise_exception=True) 
+# def Funcionario_edit(request, pk):
+#     funcionario = get_object_or_404(Funcionario, pk=pk)
+#     if request.method == 'POST':
+#         try:
+#             form = FuncionarioForm(request.POST, request.FILES, instance=funcionario)
+#             if form.is_valid():
+#                 try:
+#                     form.save()
+#                     messages.success(request, "Atualização realizada com sucesso!")
 
-                    return redirect('Funcionario_list')
+#                     return redirect('Funcionario_list')
                             
-                except Exception as e:
-                    messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
-                    return redirect('Funcionario_list')
-        except Exception as e:
-            messages.warning(request, "Erro por favor tente novamente mais tarde!")
-            return redirect('Funcionario_list')
-    else:
-        form = FuncionarioForm(instance=funcionario)
+#                 except Exception as e:
+#                     messages.warning(request, "Erro ao validar dados, por favor preencha corretamente ou tente novamente mais tarde!")
+#                     return redirect('Funcionario_list')
+#         except Exception as e:
+#             messages.warning(request, "Erro por favor tente novamente mais tarde!")
+#             return redirect('Funcionario_list')
+#     else:
+#         form = FuncionarioForm(instance=funcionario)
         
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'form': form,
-            'UserProfiles': UserProfiles,
-            'model_name':'Atualizar Funcionario',
-            'ActionCancel': 'Funcionario_list',
-            'fieldName' : [],
-        }
-        return render(request, 'generico/form.html', context)
+#         context = {
+#             'form': form,
+#             'UserProfiles': UserProfiles,
+#             'model_name':'Atualizar Funcionario',
+#             'ActionCancel': 'Funcionario_list',
+#             'fieldName' : [],
+#         }
+#         return render(request, 'generico/form.html', context)
 
-@login_required    
-@permission_required('produtos.delete_funcionario',raise_exception=True) 
-def Funcionario_delete(request, pk):
-    funcionario = get_object_or_404(Funcionario, pk=pk)
-    if request.method == 'POST':
-        funcionario.delete()
-        return redirect('Funcionario_list')
-    else:
+# @login_required    
+# @permission_required('produtos.delete_funcionario',raise_exception=True) 
+# def Funcionario_delete(request, pk):
+#     funcionario = get_object_or_404(Funcionario, pk=pk)
+#     if request.method == 'POST':
+#         funcionario.delete()
+#         return redirect('Funcionario_list')
+#     else:
 
-        user_profiles = UserProfile.objects.filter(user=request.user)
+#         user_profiles = UserProfile.objects.filter(user=request.user)
 
-        # Verifique se o queryset está vazio
-        if user_profiles.exists():
-            UserProfiles = user_profiles.first()
-        else:
-            UserProfiles = None 
+#         # Verifique se o queryset está vazio
+#         if user_profiles.exists():
+#             UserProfiles = user_profiles.first()
+#         else:
+#             UserProfiles = None 
 
-        context = {
-            'UserProfiles': UserProfiles,
-            'delete': funcionario,
-            'model_name':'Deletar Funcionario', 
-            'ActionCancel': 'Funcionario_list',
-            'fieldName' : [],
-        }
-        return render(request, 'generico/form_delete.html', context)
+#         context = {
+#             'UserProfiles': UserProfiles,
+#             'delete': funcionario,
+#             'model_name':'Deletar Funcionario', 
+#             'ActionCancel': 'Funcionario_list',
+#             'fieldName' : [],
+#         }
+#         return render(request, 'generico/form_delete.html', context)
 
 
 @login_required    
