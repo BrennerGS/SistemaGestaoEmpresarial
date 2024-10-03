@@ -864,45 +864,45 @@ def Marca_delete(request, pk):
 
 
 
-@login_required    
-@permission_required('produtos.view_fornecedor',raise_exception=True) 
-def Fornecedor_list(request):
+# @login_required    
+# @permission_required('produtos.view_fornecedor',raise_exception=True) 
+# def Fornecedor_list(request):
 
-    if request.GET.get("list"):
-        set_list_value_in_cache(int(request.GET.get("list")))
+#     if request.GET.get("list"):
+#         set_list_value_in_cache(int(request.GET.get("list")))
 
-        return redirect('Fornecedor_list')
+#         return redirect('Fornecedor_list')
     
-    else:
-        Qtlist = get_list_value_from_cache()
+#     else:
+#         Qtlist = get_list_value_from_cache()
 
-    user_profiles = UserProfile.objects.filter(user=request.user)
+#     user_profiles = UserProfile.objects.filter(user=request.user)
 
-    # Verifique se o queryset está vazio
-    if user_profiles.exists():
-        UserProfiles = user_profiles.first()
-    else:
-        UserProfiles = None 
+#     # Verifique se o queryset está vazio
+#     if user_profiles.exists():
+#         UserProfiles = user_profiles.first()
+#     else:
+#         UserProfiles = None 
 
-    model_list = Fornecedor.objects.all()
-    paginator = Paginator(model_list, Qtlist) 
+#     model_list = Fornecedor.objects.all()
+#     paginator = Paginator(model_list, Qtlist) 
 
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
 
-    context = {
-        'UserProfiles': UserProfiles,
-        'model_name': 'Fornecedor',
-        'object_list': page_obj,
-        'ActionAdd': ListAction(url_name='Fornecedor_create', label='Adicionar Fornecedor', icon='fa fa-plus', cor='w3-green'),
-        'list_actions': [
-            ListAction(url_name='Fornecedor_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
-            ListAction(url_name='Fornecedor_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
-        ],
-        'column_titles' : [f.name for f in Fornecedor._meta.fields],
-        'get_attribute': get_attribute,
-    }
-    return render(request, 'generico/base_list.html', context)
+#     context = {
+#         'UserProfiles': UserProfiles,
+#         'model_name': 'Fornecedor',
+#         'object_list': page_obj,
+#         'ActionAdd': ListAction(url_name='Fornecedor_create', label='Adicionar Fornecedor', icon='fa fa-plus', cor='w3-green'),
+#         'list_actions': [
+#             ListAction(url_name='Fornecedor_edit', label='Atualizar', icon='fa fa-edit', cor='w3-blue'),
+#             ListAction(url_name='Fornecedor_delete', label='Excluir', icon='fa fa-trash', cor='w3-red'),
+#         ],
+#         'column_titles' : [f.name for f in Fornecedor._meta.fields],
+#         'get_attribute': get_attribute,
+#     }
+#     return render(request, 'generico/base_list.html', context)
 
 # @login_required    
 # @permission_required('produtos.add_fornecedor',raise_exception=True) 

@@ -63,10 +63,10 @@ urlpatterns = [
      path('ordem_venda/item/deletar/<int:pk>/', deletar_itemordem_venda, name='deletar_itemordem_venda'),
      path('ordem_venda/deletar/<int:pk>/', deletar_ordem_venda, name='deletar_ordem_venda'),
 
-     path('configuracao_sistema/', configuracao_sistema_list, name='configuracao_sistema_list'),
-     path('configuracao_sistema/adicionar/', adicionar_configuracao_sistema, name='adicionar_configuracao_sistema'),
-     path('configuracao_sistema/editar/<int:pk>/', editar_configuracao_sistema, name='editar_configuracao_sistema'),
-     path('configuracao_sistema/deletar/<int:pk>/', deletar_configuracao_sistema, name='deletar_configuracao_sistema'),
+     # path('configuracao_sistema/', configuracao_sistema_list, name='configuracao_sistema_list'),
+     # path('configuracao_sistema/adicionar/', adicionar_configuracao_sistema, name='adicionar_configuracao_sistema'),
+     # path('configuracao_sistema/editar/<int:pk>/', editar_configuracao_sistema, name='editar_configuracao_sistema'),
+     # path('configuracao_sistema/deletar/<int:pk>/', deletar_configuracao_sistema, name='deletar_configuracao_sistema'),
 
      # path('api_request/', api_request_view, name='api_request'),
 ]
