@@ -141,3 +141,6 @@ else:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PLUGNOTAS_API_KEY = '2da392a6-79d2-4304-a8b7-959572c7e44d'
+PLUGNOTAS_BASE_URL = 'https://api.sandbox.plugnotas.com.br'

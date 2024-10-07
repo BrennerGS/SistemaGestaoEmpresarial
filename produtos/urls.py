@@ -63,6 +63,12 @@ urlpatterns = [
      path('ordem_venda/item/deletar/<int:pk>/', deletar_itemordem_venda, name='deletar_itemordem_venda'),
      path('ordem_venda/deletar/<int:pk>/', deletar_ordem_venda, name='deletar_ordem_venda'),
 
+     path('nfe/', emitir_nota, name='emitir_nota'),
+     path('nfe/<str:nota_id>/cancelamento', cancelar_nota, name='cancelar_nota'),
+     path('nfe/<str:nota_id>/status', consultar_status_nota, name='consultar_status_nota'),
+     path('nfe/<str:nota_id>/cancelamento/xml', baixar_xml_cancelamento, name='baixar_xml_cancelamento'),
+     path('nfe/<str:nota_id>/pdf', baixar_pdf, name='baixar_pdf'),
+     path('nfe/<str:nota_id>/xml', baixar_xml, name='baixar_xml'),
      # path('configuracao_sistema/', configuracao_sistema_list, name='configuracao_sistema_list'),
      # path('configuracao_sistema/adicionar/', adicionar_configuracao_sistema, name='adicionar_configuracao_sistema'),
      # path('configuracao_sistema/editar/<int:pk>/', editar_configuracao_sistema, name='editar_configuracao_sistema'),

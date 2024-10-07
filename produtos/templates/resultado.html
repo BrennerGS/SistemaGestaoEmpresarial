@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado da Emissão de Nota Fiscal</title>
+</head>
+<body>
+    <h1>Resultado da Emissão de Nota Fiscal</h1>
+
+    {% if resultado.error %}
+        <h2>Erro:</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.error.message }}</p>
+
+        <h3>Dados da Nota Fiscal Já Existente:</h3>
+        <p><strong>CNPJ Emitente:</strong> {{ resultado.error.data.current.emitente }}</p>
+        <p><strong>Valor:</strong> R$ {{ resultado.error.data.current.valor }}</p>
+        <p><strong>Status:</strong> {{ resultado.error.data.current.status }}</p>
+        <p><strong>Data de Autorização:</strong> {{ resultado.error.data.current.dataAutorizacao }}</p>
+        <p><strong>Protocolo:</strong> {{ resultado.error.data.current.protocolo }}</p>
+        
+        <h3>Links de Documentos:</h3>
+        <p><strong>CERTO PDF da Nota:</strong> 
+            <a href="http://127.0.0.1:8000/nfe/{{ resultado.id }}/pdf" target="_blank">Baixar PDF {{ resultado.id }}</a>
+        </p>
+
+        <p><strong>PDF da Nota:</strong> 
+            <a href="http://127.0.0.1:8000/nfe/{{ resultado.error.data.current.id }}/pdf" target="_blank">Baixar PDF </a>
+        </p>
+        <p><strong>XML da Nota:</strong> 
+            <a href="http://127.0.0.1:8000/nfe/{{ resultado.error.data.current.id }}/xml" target="_blank">Baixar XML</a>
+        </p>
+        <p><strong>XML do Cancelamento:</strong> 
+            <a href="{{ resultado.error.data.current.xmlCancelamento }}" target="_blank">Baixar XML de Cancelamento</a>
+        </p>
+
+    {% else %}
+        <h2>Nota Fiscal Emitida com Sucesso!</h2>
+        <p><strong>ID da Integração:</strong> {{ resultado.documents.0.idIntegracao }}</p>
+        <p><strong>ID da Nota:</strong> {{ resultado.documents.0.id }}</p>
+        <p><strong>Emitente:</strong> {{ resultado.documents.0.Emitente }}</p>
+        <p><strong>Mensagem:</strong> {{ resultado.message }}</p>
+        <p><strong>Protocolo:</strong> {{ resultado.protocol }}</p>
+
+        <h3>Links de Documentos:</h3>
+        <p><strong>PDF da Nota:</strong> 
+            <a href="http://127.0.0.1:8000/emitirnota/{{ resultado.documents.0.id }}/pdf" target="_blank">Baixar PDF {{ resultado.documents.0.id }}</a>
+        </p>
+        <p><strong>XML da Nota:</strong> 
+            <a href="http://127.0.0.1:8000/emitirnota/{{ resultado.documents.0.id }}/xml" target="_blank">Baixar PDF {{ resultado.documents.0.id }}</a>
+        </p>
+    {% endif %}
+    
+    <a href="{% url 'emitir_nota' %}">Voltar</a>
+</body>
+</html>

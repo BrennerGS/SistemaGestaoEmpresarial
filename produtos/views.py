@@ -1,8 +1,11 @@
 import logging
 import logging.config
+import secrets
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+
+from services.Notas_service import NotasService
 from .forms import *
 from django.forms import formset_factory
 from .models import *
@@ -11,6 +14,7 @@ from .fields import *
 from django.core.paginator import Paginator
 from django.core.cache import cache
 from django.contrib.auth.decorators import  login_required, permission_required
+from django.http import HttpResponse, Http404
 
 Qtd = 20
 
@@ -1862,3 +1866,169 @@ def adicionar_configuracao_sistema(request):
         }
         return render(request, 'generico/form.html', context)
 
+
+
+
+def emitir_nota(request):
+    if request.method == 'POST':
+        # Obter dados do formulário ou preparar o payload
+        
+        dados_nota = [
+  {
+    "idIntegracao": secrets.token_hex(15),
+    "presencial": request.POST.get('presencial'),
+    "consumidorFinal": request.POST.get('consumidorFinal'),
+    "natureza": request.POST.get('natureza'),
+    "emitente": {
+      "cpfCnpj": request.POST.get('emitenteCpfCnpj')
+    },
+    "destinatario": {
+      "cpfCnpj": request.POST.get('destinatarioCpfCnpj'),
+      "razaoSocial": request.POST.get('razaoSocial'),
+      "email": request.POST.get('email'),
+      "endereco": {
+        "tipoLogradouro": request.POST.get('tipoLogradouro'),
+        "logradouro": request.POST.get('logradouro'),
+        "numero": request.POST.get('numero'),
+        "bairro": request.POST.get('bairro'),
+        "codigoCidade": request.POST.get('codigoCidade'),
+        "descricaoCidade": request.POST.get('descricaoCidade'),
+        "estado": request.POST.get('estado'),
+        "cep": request.POST.get('cep')
+      }
+    },
+    "itens": [
+      {
+        "codigo": request.POST.get('codigo'),
+        "descricao": request.POST.get('descricaoItem'),
+        "ncm": request.POST.get('ncm'),
+        "cest": request.POST.get('cest'),
+        "cfop": request.POST.get('cfop'),
+        "valorUnitario": {
+          "comercial": request.POST.get('valorUnitarioComercial'),
+          "tributavel": request.POST.get('valorUnitarioTributavel')
+        },
+        "valor": request.POST.get('valorPagamento'),
+        "tributos": {
+          "icms": {
+            "origem": request.POST.get('origemIcms'),
+            "cst": request.POST.get('cstIcms'),
+            "baseCalculo": {
+              "modalidadeDeterminacao": request.POST.get('modalidadeDeterminacaoBaseCalculo'),
+              "valor": request.POST.get('valorBaseCalculoIcms')
+            },
+            "aliquota": request.POST.get('aliquotaIcms'),
+            "valor": request.POST.get('valorIcms')
+          },
+          "pis": {
+            "cst": request.POST.get('cstPis'),
+            "baseCalculo": {
+              "valor": request.POST.get('valorBaseCalculoPis'),
+              "quantidade": request.POST.get('quantidadeBaseCalculoPis')
+            },
+            "aliquota": request.POST.get('aliquotaPis'),
+            "valor": request.POST.get('valorPis')
+          },
+          "cofins": {
+            "cst": f"{request.POST.get('cstCofins')}",
+            "baseCalculo": {
+              "valor": request.POST.get('valorBaseCalculoCofins')
+            },
+            "aliquota": request.POST.get('aliquotaCofins'),
+            "valor": request.POST.get('valorCofins')
+          }
+        }
+      }
+    ],
+    "pagamentos": [
+      {
+        "aVista": request.POST.get('aVista'),
+        "meio": f'{request.POST.get('meioPagamento')}',
+        "valor": request.POST.get('valorTotalPagamento')
+      }
+    ],
+    "responsavelTecnico": {
+      "cpfCnpj": request.POST.get('cpfCnpjResponsavel'),
+      "nome": request.POST.get('nomeResponsavel'),
+      "email": request.POST.get('emailResponsavel'),
+      "telefone": {
+        "ddd": request.POST.get('telefoneDdd'),
+        "numero": request.POST.get('telefoneNumero')
+      }
+    }
+  }
+]
+
+        print(dados_nota)
+        plugnotas = NotasService()
+        resultado = plugnotas.criar_nota_fiscal(dados_nota)
+        print(resultado)
+        return render(request, 'resultado.html', {'resultado': resultado})
+
+    return render(request, 'emitir_nota.html')
+
+def cancelar_nota(request, nota_id):
+    #if request.method == 'POST':
+        # Obter dados do formulário ou preparar o payload
+        
+        motivo = "Erro na emissão da Nota Fiscal eletrônica."
+
+        plugnotas = NotasService()
+        resultado = plugnotas.cancelar_nota_fiscal(nota_id=nota_id,motivo= motivo)
+        print(resultado)
+        return render(request, 'resultadoCancelamento.html', {'resultado': resultado})
+
+    #return render(request, 'emitir_nota.html')
+
+# View para baixar o XML da nota fiscal
+def baixar_xml_cancelamento(request, nota_id):
+    plugnotas = NotasService()
+    response = plugnotas.baixar_xml_cancelamento(nota_id)
+
+    if response.status_code == 200:
+        # Retorna o XML para o usuário
+        xml_content = response.content
+        return HttpResponse(xml_content, content_type='application/xml')
+    else:
+        raise Http404("XML não encontrado ou erro ao processar a requisição.")
+
+def consultar_status_nota(request, nota_id):
+        
+        plugnotas = NotasService()
+        resultado = plugnotas.consultar_nota_fiscal(nota_id=nota_id)
+        print(resultado)
+        return render(request, 'resultadoCancelamentoStatus.html', {'resultado': resultado})
+
+def criar_nota_fiscal(self, payload):
+    try:
+        url = f'{self.base_url}/nfe'
+        response = requests.post(url, json=payload, headers=self.headers)
+        response.raise_for_status()  # Lança exceção para erros HTTP
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {'erro': f'Erro ao comunicar com a API: {str(e)}'}
+    
+# View para baixar o PDF da nota fiscal
+def baixar_pdf(request, nota_id):
+    plugnotas = NotasService()
+    response = plugnotas.baixar_pdf(nota_id)
+
+    if response.status_code == 200:
+        # Retorna o PDF para o usuário
+        pdf_content = response.content
+        return HttpResponse(pdf_content, content_type='application/pdf')
+    else:
+        raise Http404("PDF não encontrado ou erro ao processar a requisição.")
+
+
+# View para baixar o XML da nota fiscal
+def baixar_xml(request, nota_id):
+    plugnotas = NotasService()
+    response = plugnotas.baixar_xml(nota_id)
+
+    if response.status_code == 200:
+        # Retorna o XML para o usuário
+        xml_content = response.content
+        return HttpResponse(xml_content, content_type='application/xml')
+    else:
+        raise Http404("XML não encontrado ou erro ao processar a requisição.")

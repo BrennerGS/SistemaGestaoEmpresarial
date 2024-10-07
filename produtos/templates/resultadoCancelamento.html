@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado da Emissão de Nota Fiscal</title>
+</head>
+<body>
+    <h1>Resultado da Emissão de Nota Fiscal</h1>
+
+    {% if resultado.error %}
+        <h2>Erro:</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.error.message }}</p>
+
+        <h3>Dados da Nota Fiscal Já Existente:</h3>
+        <p><strong>idIntegracao:</strong> {{ resultado.error.data.idIntegracao }}</p>
+        <p><strong>id:</strong> {{ resultado.error.data.id }}</p>
+        <p><strong>Nota com Status:</strong> {{ resultado.error.data.status }}</p>
+       
+
+    {% else %}
+        <h2>Cancelamento da Nota Fiscal Realizado com Sucesso!</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.message }}</p>
+
+    {% endif %}
+    
+    <a href="{% url 'emitir_nota' %}">Voltar</a>
+</body>
+</html>
