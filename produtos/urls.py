@@ -64,8 +64,9 @@ urlpatterns = [
      path('ordem_venda/deletar/<int:pk>/', deletar_ordem_venda, name='deletar_ordem_venda'),
 
      path('nfe/', emitir_nota, name='emitir_nota'),
-     path('nfe/<str:nota_id>/cancelamento', cancelar_nota, name='cancelar_nota'),
-     path('nfe/<str:nota_id>/status', consultar_status_nota, name='consultar_status_nota'),
+     path('nfe/cancelamento', cancelar_nota, name='cancelar_nota'),
+     path('nfe/cce', correcao_nota, name='correcao_nota'),
+     path('nfe/<str:nota_id>/cancelamento/status', consultar_cancelamento_status_nota, name='consultar_cancelamento_status_nota'),
      path('nfe/<str:nota_id>/cancelamento/xml', baixar_xml_cancelamento, name='baixar_xml_cancelamento'),
      path('nfe/<str:nota_id>/pdf', baixar_pdf, name='baixar_pdf'),
      path('nfe/<str:nota_id>/xml', baixar_xml, name='baixar_xml'),

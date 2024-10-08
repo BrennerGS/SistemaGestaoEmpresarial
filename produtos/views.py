@@ -1967,10 +1967,11 @@ def emitir_nota(request):
 
     return render(request, 'emitir_nota.html')
 
-def cancelar_nota(request, nota_id):
-    #if request.method == 'POST':
+
+def cancelar_nota(request):
+    if request.method == 'POST':
         # Obter dados do formulário ou preparar o payload
-        
+        nota_id = request.POST.get('idIntegracao')
         motivo = "Erro na emissão da Nota Fiscal eletrônica."
 
         plugnotas = NotasService()
@@ -1978,7 +1979,7 @@ def cancelar_nota(request, nota_id):
         print(resultado)
         return render(request, 'resultadoCancelamento.html', {'resultado': resultado})
 
-    #return render(request, 'emitir_nota.html')
+    return render(request, 'cancelar_nota.html')
 
 # View para baixar o XML da nota fiscal
 def baixar_xml_cancelamento(request, nota_id):
@@ -1992,12 +1993,12 @@ def baixar_xml_cancelamento(request, nota_id):
     else:
         raise Http404("XML não encontrado ou erro ao processar a requisição.")
 
-def consultar_status_nota(request, nota_id):
+def consultar_cancelamento_status_nota(request, nota_id):
         
         plugnotas = NotasService()
-        resultado = plugnotas.consultar_nota_fiscal(nota_id=nota_id)
+        resultado = plugnotas.consultar_cancelamento_status_nota_fiscal(nota_id=nota_id)
         print(resultado)
-        return render(request, 'resultadoCancelamentoStatus.html', {'resultado': resultado})
+        return render(request, 'resultadoCancelamentoStatus.html', {'resultado': resultado, "nota_id": nota_id})
 
 def criar_nota_fiscal(self, payload):
     try:
@@ -2007,7 +2008,20 @@ def criar_nota_fiscal(self, payload):
         return response.json()
     except requests.exceptions.RequestException as e:
         return {'erro': f'Erro ao comunicar com a API: {str(e)}'}
-    
+
+def correcao_nota(request):
+    if request.method == 'POST':
+        # Obter dados do formulário ou preparar o payload
+        nota_id = request.POST.get('idIntegracao')
+        correcao = "Alterar o bairro do Destinatário para Bairro Teste"
+
+        plugnotas = NotasService()
+        resultado = plugnotas.correcao_nota_fiscal(nota_id=nota_id,correcao= correcao)
+        print(resultado)
+        return render(request, 'resultadoCorrecao.html', {'resultado': resultado})
+
+    return render(request, 'correcao_nota.html')
+
 # View para baixar o PDF da nota fiscal
 def baixar_pdf(request, nota_id):
     plugnotas = NotasService()

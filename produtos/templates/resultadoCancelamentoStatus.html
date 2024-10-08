@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado da Emissão de Nota Fiscal</title>
+    <title>Resultado Cancelamento da Nota Fiscal</title>
 </head>
 <body>
-    <h1>Resultado da Emissão de Nota Fiscal</h1>
+    <h1>Resultado Cancelamento da Nota Fiscal</h1>
 
     {% if resultado.error %}
         <h2>Erro:</h2>
         <p><strong>Mensagem:</strong> {{ resultado.error.message }}</p>
-
-        <h3>Dados da Nota Fiscal Já Existente:</h3>
+        <hr>
         <p><strong>idIntegracao:</strong> {{ resultado.error.data.idIntegracao }}</p>
         <p><strong>id:</strong> {{ resultado.error.data.id }}</p>
         <p><strong>Nota com Status:</strong> {{ resultado.error.data.status }}</p>
@@ -23,7 +22,11 @@
         <p><strong>Mensagem:</strong> {{ resultado.message }}</p>
         <p><strong>Justificativa:</strong> {{ resultado.data.justificativa }}</p>
         <p><strong>RespostaSefaz:</strong> {{ resultado.data.respostaSefaz }}</p>
-        <p><strong>xml:</strong> {{ resultado.data.xml }}</p>
+        <p><strong>cStat:</strong> {{ resultado.data.cStat }}</p>
+        <p><strong>date:</strong> {{ resultado.data.date }}</p>
+        <p><strong>protocolo:</strong> {{ resultado.data.protocolo }}</p>
+        <p><strong>status:</strong> {{ resultado.data.status }}</p>
+        <p><strong>xml:</strong> <a href="{% url 'baixar_xml_cancelamento' nota_id %}">Baixar xml do Cancelamento</a></p>
 
     {% endif %}
     

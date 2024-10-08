@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emitir Nota Fiscal</title>
+</head>
+<body>
+    <h1>Cancelar Nota Fiscal</h1>
+
+    <form method="post" action="{% url 'cancelar_nota' %}">
+        {% csrf_token %}
+        
+        <label for="idIntegracao">idIntegracao:</label>
+        <input type="text" id="idIntegracao" name="idIntegracao" value="" required><br><br>
+
+        <label for="motivo">Motivo:</label>
+        <input type="text" id="motivo" name="motivo" value="Erro na emissão da Nota Fiscal eletrônica." required><br><br>
+
+        <button type="submit">Cancelar Nota Fiscal</button>
+    </form>
+</body>
+</html>
