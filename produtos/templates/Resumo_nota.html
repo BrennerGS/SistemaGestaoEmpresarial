@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo Nota Fiscal</title>
+</head>
+<body>
+    <h1>Resumo Nota Fiscal</h1>
+
+    <form method="post" >
+        {% csrf_token %}
+        
+        <label for="idIntegracao">idIntegracao:</label>
+        <input type="text" id="idIntegracao" name="idIntegracao" value="670543184a8e3ab15da8b93e" required><br><br>
+        670543184a8e3ab15da8b93e com evento <br>
+        ou 670556f58bea9fbf97edebf4 sem Evento <br>
+        
+        <button type="submit">Confirmar</button>
+    </form>
+</body>
+</html>

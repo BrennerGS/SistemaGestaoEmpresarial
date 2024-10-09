@@ -21,6 +21,23 @@ class NotasService:
         response = requests.post(url, json=payload, headers=self.headers)
         return response.json()
 
+    def resumo_nota_fiscal(self, nota_id):
+        
+        url = f'{self.base_url}/nfe/{nota_id}/resumo'
+        response = requests.get(url, headers=self.headers)
+        return response.json()
+
+    def cce_baixar_pdf(self, nota_id):
+        url = f'{self.base_url}/nfe/{nota_id}/cce/pdf'
+        response = requests.get(url, headers=self.headers)
+        return response
+
+    def cce_baixar_xml(self, nota_id):
+        url = f'{self.base_url}/nfe/{nota_id}/cce/xml'
+        response = requests.get(url, headers=self.headers)
+        return response
+    
+
     # Consultar Nota Fiscal pelo ID
     def consultar_cancelamento_status_nota_fiscal(self, nota_id):
         url = f'{self.base_url}/nfe/{nota_id}/cancelamento/status'  # Conforme documentação
@@ -32,6 +49,11 @@ class NotasService:
         url = f'{self.base_url}/nfe/{nota_id}/cancelamento'  # Padrão conforme documentação
         payload = {'justificativa': motivo}
         response = requests.post(url, json=payload, headers=self.headers)
+        return response.json()
+    
+    def consultar_correcao_status_nota_fiscal(self, nota_id):
+        url = f'{self.base_url}/nfe/{nota_id}/cce/status'  # Conforme documentação
+        response = requests.get(url, headers=self.headers)
         return response.json()
     
 

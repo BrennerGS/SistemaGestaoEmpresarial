@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Status Correção Nota Fiscal</title>
+</head>
+<body>
+    <h1>Consultar Status Correção Nota Fiscal</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="idIntegracao">idIntegracao:</label>
+        <input type="text" id="idIntegracao" name="idIntegracao" value="670543184a8e3ab15da8b93e" required><br><br>
+
+        <button type="submit">Confirmar</button>
+    </form>
+</body>
+</html>

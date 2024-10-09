@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar a solicitação de correção da nota</title>
+</head>
+<body>
+    <h1>Consultar a solicitação de correção da nota</h1>
+
+    {% if resultado.error %}
+        <h2>Erro:</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.error.message }}</p>
+        <hr>
+        <p><strong>idOrChaveOrProtocol:</strong> {{ resultado.error.data.idOrChaveOrProtocol }}</p>
+       
+
+    {% else %}
+        <h2>Cancelamento da Nota Fiscal Realizado com Sucesso!</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.message }}</p>
+        <p><strong>date:</strong> {{ resultado.data.date }}</p>
+        <p><strong>correcao:</strong> {{ resultado.data.correcao }}</p>
+        <p><strong>numeroSequencia:</strong> {{ resultado.data.numeroSequencia }}</p>
+        <p><strong>status:</strong> {{ resultado.data.status }}</p>
+        <p><strong>respostaSefaz:</strong> {{ resultado.data.respostaSefaz }}</p>
+        <p><strong>cStat:</strong> {{ resultado.data.cStat }}</p>
+        <p><strong>protocolo:</strong> {{ resultado.data.protocolo }}</p>
+        <p><strong>mensagemErro:</strong> {{ resultado.data.mensagemErro }}</p>
+        
+        
+        
+        <p><strong>pdf:</strong> <a href="{% url 'baixar_cce_pdf' nota_id %}">pdf </a></p>
+        <p><strong>xml:</strong> <a href="{% url 'baixar_cce_xml' nota_id %}">xml </a></p>
+
+    {% endif %}
+    
+    <a href="{% url 'emitir_nota' %}">Voltar</a>
+</body>
+</html>

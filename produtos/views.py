@@ -1981,10 +1981,45 @@ def cancelar_nota(request):
 
     return render(request, 'cancelar_nota.html')
 
+def resumo_nota(request):
+    if request.method == 'POST':
+        # Obter dados do formulário ou preparar o payload
+        nota_id = request.POST.get('idIntegracao')
+        plugnotas = NotasService()
+        resultado = plugnotas.resumo_nota_fiscal(nota_id=nota_id)
+        print(resultado)
+        return render(request, 'resultadoResumo.html', {'resultado': resultado })
+
+    return render(request, 'Resumo_nota.html')
+
 # View para baixar o XML da nota fiscal
 def baixar_xml_cancelamento(request, nota_id):
     plugnotas = NotasService()
     response = plugnotas.baixar_xml_cancelamento(nota_id)
+
+    if response.status_code == 200:
+        # Retorna o XML para o usuário
+        xml_content = response.content
+        return HttpResponse(xml_content, content_type='application/xml')
+    else:
+        raise Http404("XML não encontrado ou erro ao processar a requisição.")
+
+def baixar_cce_pdf(request, nota_id):
+    plugnotas = NotasService()
+    response = plugnotas.cce_baixar_pdf(nota_id)
+
+    if response.status_code == 200:
+        # Retorna o PDF para o usuário
+        pdf_content = response.content
+        return HttpResponse(pdf_content, content_type='application/pdf')
+    else:
+        raise Http404("PDF não encontrado ou erro ao processar a requisição.")
+
+
+# View para baixar o XML da nota fiscal
+def baixar_cce_xml(request, nota_id):
+    plugnotas = NotasService()
+    response = plugnotas.cce_baixar_xml(nota_id)
 
     if response.status_code == 200:
         # Retorna o XML para o usuário
@@ -1999,6 +2034,15 @@ def consultar_cancelamento_status_nota(request, nota_id):
         resultado = plugnotas.consultar_cancelamento_status_nota_fiscal(nota_id=nota_id)
         print(resultado)
         return render(request, 'resultadoCancelamentoStatus.html', {'resultado': resultado, "nota_id": nota_id})
+
+def consultar_correcao_status_nota(request):
+    if request.method == 'POST':
+        nota_id = request.POST.get('idIntegracao')    
+        plugnotas = NotasService()
+        resultado = plugnotas.consultar_correcao_status_nota_fiscal(nota_id=nota_id)
+        print(resultado)
+        return render(request, 'resultadoCorrecaoStatus.html', {'resultado': resultado, "nota_id": nota_id})
+    return render(request, 'correcao_nota_status.html')
 
 def criar_nota_fiscal(self, payload):
     try:

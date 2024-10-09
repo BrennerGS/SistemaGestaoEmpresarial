@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo Nota Fiscal</title>
+</head>
+<body>
+    <h1>Resumo Nota Fiscal</h1>
+
+    {% if resultado.error %}
+        <h2>Erro:</h2>
+        <p><strong>Mensagem:</strong> {{ resultado.error.message }}</p>
+        <p><strong>Nota com Status:</strong> {{ resultado.error.data.status }}</p>
+        <hr>
+        <p><strong>id:</strong> {{ resultado.error.data.id }}</p>
+        <p><strong>idIntegracao:</strong> {{ resultado.error.data.idIntegracao }}</p>
+        
+       
+
+    {% else %}
+
+        <p><strong>mensagem:</strong> {{ resultado.0.mensagem }}</p>
+        <hr>
+        <p><strong>id:</strong> {{ resultado.0.id }}</p>
+        <p><strong>idIntegracao:</strong> {{ resultado.0.idIntegracao }}</p>
+        <p><strong>emissao:</strong> {{ resultado.0.emissao }}</p>
+        <p><strong>status:</strong> {{ resultado.0.status }}</p>
+        <p><strong>destinada:</strong> {{ resultado.0.destinada }}</p>
+        <p><strong>emitente:</strong> {{ resultado.0.emitente }}</p>
+        <p><strong>destinatario:</strong> {{ resultado.0.destinatario }}</p>
+        <p><strong>valor:</strong> {{ resultado.0.valor }}</p>
+        <p><strong>dataAutorizacao:</strong> {{ resultado.0.dataAutorizacao }}</p>
+        <p><strong>numero:</strong> {{ resultado.0.numero }}</p>
+        <p><strong>serie:</strong> {{ resultado.0.serie }}</p>
+        <p><strong>chave:</strong> {{ resultado.0.chave }}</p>
+        <p><strong>protocolo:</strong> {{ resultado.0.protocolo }}</p>
+        <p><strong>pdf:</strong> <a href="{% url 'baixar_pdf' resultado.0.id %}">Baixar</a></p>
+        <p><strong>xml:</strong> <a href="{% url 'baixar_xml' resultado.0.id %}">Baixar</a></p>
+        <p><strong>cStat:</strong> {{ resultado.0.cStat }}</p>
+        <hr>
+        {% if resultado.0.eventos.cce.date %}
+        <h2>Eventos:</h2>
+        <p><strong>cce data:</strong> {{ resultado.0.eventos.cce.date }}</p>
+        <p><strong>cce correcao:</strong> {{ resultado.0.eventos.cce.correcao }}</p>
+        <p><strong>cce numeroSequencia:</strong> {{ resultado.0.eventos.cce.numeroSequencia }}</p>
+        <p><strong>cce status:</strong> {{ resultado.0.eventos.cce.status }}</p>
+        <p><strong>cce respostaSefaz:</strong> {{ resultado.0.eventos.cce.respostaSefaz }}</p>
+        <p><strong>cce pdf:</strong> <a href="{% url 'baixar_cce_pdf' resultado.0.id %}">Baixar</a></p>
+        <p><strong>cce xml:</strong> <a href="{% url 'baixar_cce_xml' resultado.0.id %}">Baixar</a></p>
+        {% endif %}
+    {% endif %}
+    
+    <a href="{% url 'emitir_nota' %}">Voltar</a>
+</body>
+</html>
