@@ -26,6 +26,13 @@ class NotasService:
         url = f'{self.base_url}/nfe/{nota_id}/resumo'
         response = requests.get(url, headers=self.headers)
         return response.json()
+    
+    def resumo_nota_fiscal_idintegracao(self, idIntegracao, cnpj):
+        
+        url = f'{self.base_url}/nfe/{cnpj}/{idIntegracao}/resumo'
+        response = requests.get(url, headers=self.headers)
+        return response.json()
+
 
     def cce_baixar_pdf(self, nota_id):
         url = f'{self.base_url}/nfe/{nota_id}/cce/pdf'

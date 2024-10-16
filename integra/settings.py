@@ -27,7 +27,6 @@ SECRET_KEY = 'django-insecure-nnq8lx4fc5wqw_*!avzlsj6&iun(q12=x)60b+nu(x)ccwcceu
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'www.microbazzar.com.br',
     '127.0.0.1',
 ]
 
@@ -144,3 +143,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PLUGNOTAS_API_KEY = '2da392a6-79d2-4304-a8b7-959572c7e44d'
 PLUGNOTAS_BASE_URL = 'https://api.sandbox.plugnotas.com.br'
+
+PLUG4MARKET_API_KEY="sua_chave_api_aqui"
+PLUG4MARKET_BASE_URL="https://api.plug4market.com.br/v1"

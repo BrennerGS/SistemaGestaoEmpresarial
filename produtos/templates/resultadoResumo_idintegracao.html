@@ -3,7 +3,7 @@
 {% block content %}
 
  
-    <h1>Resumo Nota Fiscal</h1>
+    <h1>Resumo Nota Fiscal por id integração</h1>
 
     {% if resultado.error %}
         <h2>Erro:</h2>
@@ -49,5 +49,6 @@
     {% endif %}
     
     <a href="{% url 'emitir_nota' %}">Voltar</a>
+
 
 {% endblock %}

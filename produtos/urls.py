@@ -63,19 +63,26 @@ urlpatterns = [
      path('ordem_venda/item/deletar/<int:pk>/', deletar_itemordem_venda, name='deletar_itemordem_venda'),
      path('ordem_venda/deletar/<int:pk>/', deletar_ordem_venda, name='deletar_ordem_venda'),
 
-     path('nfe/', emitir_nota, name='emitir_nota'),
+     path('notas/', home_notas, name='home_notas'),
+     path('notas/nfe/', home_nfe, name='home_nfe'),
+     path('nfe/emitir', emitir_nota, name='emitir_nota'),
      path('nfe/cancelamento', cancelar_nota, name='cancelar_nota'),
      path('nfe/cce', correcao_nota, name='correcao_nota'),
      path('nfe/cce/status', consultar_correcao_status_nota, name='consultar_correcao_status_nota'),
-     path('nfe/resumo', resumo_nota, name='resumo_nota'),
+     path('nfe/resumoporid', resumo_nota, name='resumo_nota'),
+     path('nfe/resumoporidintegracao', resumo_nota_idintegracao, name='resumo_nota_idintegracao'),
      path('nfe/<str:nota_id>/cce/pdf', baixar_cce_pdf, name='baixar_cce_pdf'),
      path('nfe/<str:nota_id>/cce/xml', baixar_cce_xml, name='baixar_cce_xml'),
 
      path('nfe/<str:nota_id>/cancelamento/status', consultar_cancelamento_status_nota, name='consultar_cancelamento_status_nota'),
      path('nfe/<str:nota_id>/cancelamento/xml', baixar_xml_cancelamento, name='baixar_xml_cancelamento'),
      
+     path('nfe/pdf', baixar_pdf, name='baixar_pdf'),
+     path('nfe/xml', baixar_xml, name='baixar_xml'),
      path('nfe/<str:nota_id>/pdf', baixar_pdf, name='baixar_pdf'),
      path('nfe/<str:nota_id>/xml', baixar_xml, name='baixar_xml'),
+
+
      # path('configuracao_sistema/', configuracao_sistema_list, name='configuracao_sistema_list'),
      # path('configuracao_sistema/adicionar/', adicionar_configuracao_sistema, name='adicionar_configuracao_sistema'),
      # path('configuracao_sistema/editar/<int:pk>/', editar_configuracao_sistema, name='editar_configuracao_sistema'),

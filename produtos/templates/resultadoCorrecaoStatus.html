@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultar a solicitação de correção da nota</title>
-</head>
-<body>
+{% extends 'base_teste.html' %}
+
+{% block content %}
+
+ 
     <h1>Consultar a solicitação de correção da nota</h1>
 
     {% if resultado.error %}
@@ -35,5 +32,7 @@
     {% endif %}
     
     <a href="{% url 'emitir_nota' %}">Voltar</a>
-</body>
-</html>
+
+
+
+{% endblock %}

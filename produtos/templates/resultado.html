@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado da Emissão de Nota Fiscal</title>
-</head>
-<body>
+{% extends 'base_teste.html' %}
+
+{% block content %}
+
     <h1>Resultado da Emissão de Nota Fiscal</h1>
 
     {% if resultado.error %}
@@ -44,13 +40,17 @@
 
         <h3>Links de Documentos:</h3>
         <p><strong>PDF da Nota:</strong> 
-            <a href="http://127.0.0.1:8000/emitirnota/{{ resultado.documents.0.id }}/pdf" target="_blank">Baixar PDF {{ resultado.documents.0.id }}</a>
+            <a href="{% url 'baixar_pdf' resultado.documents.0.id %}" target="_blank">Baixar PDF</a>
         </p>
         <p><strong>XML da Nota:</strong> 
-            <a href="http://127.0.0.1:8000/emitirnota/{{ resultado.documents.0.id }}/xml" target="_blank">Baixar PDF {{ resultado.documents.0.id }}</a>
+            <a href="{% url 'baixar_xml' resultado.documents.0.id %}" target="_blank">Baixar XML</a>
         </p>
     {% endif %}
     
     <a href="{% url 'emitir_nota' %}">Voltar</a>
-</body>
-</html>
+
+
+
+    
+
+{% endblock %}

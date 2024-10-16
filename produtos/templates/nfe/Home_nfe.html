@@ -1,0 +1,120 @@
+{% extends 'base_teste.html' %}
+
+{% block content %}
+
+<h1>Nota Fical</h1>
+
+
+<div class="row">
+    
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Emitir Notas</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'emitir_nota' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Cancelar Notas</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'cancelar_nota' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Correção de Nota</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'correcao_nota' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Status de Correção</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'consultar_correcao_status_nota' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Resumo por id</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'resumo_nota' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Baixar pdf nota</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'baixar_pdf' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-6">
+    <!-- small box -->
+    <div class="small-box" style="background-color: #5793d8; color: #ffffff;">
+      <div class="inner">
+        <h3>Baixar xml nota</h3>
+
+        <p>&nbsp;</p>
+      </div>
+      <div class="icon">
+        <i class="fas fa-user-tie"></i>
+      </div>
+      <a href="{% url 'baixar_xml' %}" class="small-box-footer">Mais Informações <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+   
+    
+      
+  </div>
+
+
+{% endblock %}

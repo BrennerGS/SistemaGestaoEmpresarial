@@ -1,0 +1,24 @@
+{% extends 'base_teste.html' %}
+
+{% block content %}
+
+ 
+    <h1>Resumo Nota Fiscal por id integração</h1>
+
+    <form method="post" >
+        {% csrf_token %}
+        
+        <label for="idIntegracao">idIntegracao:</label>
+        <input type="text" idIntegracao="idIntegracao" name="idIntegracao" value="7b6580336118e564679df2b025485d" required><br><br>
+        670543184a8e3ab15da8b93e com evento <br>
+        ou 670556f58bea9fbf97edebf4 sem Evento <br>
+
+        <label for="cnpj">CNPJ:</label>
+        <input type="text" id="cnpj" name="cnpj" value="08187168000160" required><br><br>
+        
+        
+        <button type="submit">Confirmar</button>
+    </form>
+
+    
+{% endblock %}

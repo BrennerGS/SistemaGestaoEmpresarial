@@ -1801,6 +1801,9 @@ def editar_configuracao_sistema(request, pk):
 
     return render(request, 'generico/form.html', context)
 
+@login_required    
+@permission_required('produtos.delete_configuracaosistema',raise_exception=True)
+
 def deletar_configuracao_sistema(request, pk):
     configuracao = get_object_or_404(ConfiguracaoSistema, pk=pk)
     if request.method == 'POST':
@@ -1829,6 +1832,9 @@ def deletar_configuracao_sistema(request, pk):
         }
         return render(request, 'generico/form_delete.html', context)
 
+
+@login_required    
+@permission_required('produtos.add_configuracaosistema',raise_exception=True)
 def adicionar_configuracao_sistema(request):
     if request.method == 'POST':
         try:
@@ -1867,8 +1873,37 @@ def adicionar_configuracao_sistema(request):
         return render(request, 'generico/form.html', context)
 
 
+@login_required    
+def home_notas(request):
+    user_profiles = UserProfile.objects.filter(user=request.user)
 
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+        
+    context = {
+        'UserProfiles': UserProfiles,
+    }
+    return render(request, 'nfe/Home_Notas.html', context)
 
+@login_required   
+def home_nfe(request):
+    user_profiles = UserProfile.objects.filter(user=request.user)
+
+    # Verifique se o queryset está vazio
+    if user_profiles.exists():
+        UserProfiles = user_profiles.first()
+    else:
+        UserProfiles = None 
+        
+    context = {
+        'UserProfiles': UserProfiles,
+    }
+    return render(request, 'nfe/home_nfe.html', context)
+
+@login_required   
 def emitir_nota(request):
     if request.method == 'POST':
         # Obter dados do formulário ou preparar o payload
@@ -1959,7 +1994,7 @@ def emitir_nota(request):
   }
 ]
 
-        print(dados_nota)
+        
         plugnotas = NotasService()
         resultado = plugnotas.criar_nota_fiscal(dados_nota)
         print(resultado)
@@ -1967,7 +2002,7 @@ def emitir_nota(request):
 
     return render(request, 'emitir_nota.html')
 
-
+@login_required   
 def cancelar_nota(request):
     if request.method == 'POST':
         # Obter dados do formulário ou preparar o payload
@@ -1981,10 +2016,11 @@ def cancelar_nota(request):
 
     return render(request, 'cancelar_nota.html')
 
+@login_required   
 def resumo_nota(request):
     if request.method == 'POST':
         # Obter dados do formulário ou preparar o payload
-        nota_id = request.POST.get('idIntegracao')
+        nota_id = request.POST.get('id')
         plugnotas = NotasService()
         resultado = plugnotas.resumo_nota_fiscal(nota_id=nota_id)
         print(resultado)
@@ -1992,7 +2028,22 @@ def resumo_nota(request):
 
     return render(request, 'Resumo_nota.html')
 
-# View para baixar o XML da nota fiscal
+@login_required   
+def resumo_nota_idintegracao(request):
+    if request.method == 'POST':
+        # Obter dados do formulário ou preparar o payload
+        idIntegracao = request.POST.get('idIntegracao')
+        cnpj = request.POST.get('cnpj')
+
+        plugnotas = NotasService()
+        resultado = plugnotas.resumo_nota_fiscal_idintegracao(cnpj=cnpj, idIntegracao=idIntegracao)
+        print(resultado)
+        return render(request, 'resultadoResumo_idintegracao.html', {'resultado': resultado })
+
+    return render(request, 'Resumo_nota_idintegracao.html')
+
+
+@login_required   
 def baixar_xml_cancelamento(request, nota_id):
     plugnotas = NotasService()
     response = plugnotas.baixar_xml_cancelamento(nota_id)
@@ -2004,6 +2055,7 @@ def baixar_xml_cancelamento(request, nota_id):
     else:
         raise Http404("XML não encontrado ou erro ao processar a requisição.")
 
+@login_required   
 def baixar_cce_pdf(request, nota_id):
     plugnotas = NotasService()
     response = plugnotas.cce_baixar_pdf(nota_id)
@@ -2016,7 +2068,7 @@ def baixar_cce_pdf(request, nota_id):
         raise Http404("PDF não encontrado ou erro ao processar a requisição.")
 
 
-# View para baixar o XML da nota fiscal
+@login_required   
 def baixar_cce_xml(request, nota_id):
     plugnotas = NotasService()
     response = plugnotas.cce_baixar_xml(nota_id)
@@ -2028,6 +2080,7 @@ def baixar_cce_xml(request, nota_id):
     else:
         raise Http404("XML não encontrado ou erro ao processar a requisição.")
 
+@login_required   
 def consultar_cancelamento_status_nota(request, nota_id):
         
         plugnotas = NotasService()
@@ -2035,6 +2088,7 @@ def consultar_cancelamento_status_nota(request, nota_id):
         print(resultado)
         return render(request, 'resultadoCancelamentoStatus.html', {'resultado': resultado, "nota_id": nota_id})
 
+@login_required   
 def consultar_correcao_status_nota(request):
     if request.method == 'POST':
         nota_id = request.POST.get('idIntegracao')    
@@ -2044,6 +2098,7 @@ def consultar_correcao_status_nota(request):
         return render(request, 'resultadoCorrecaoStatus.html', {'resultado': resultado, "nota_id": nota_id})
     return render(request, 'correcao_nota_status.html')
 
+@login_required   
 def criar_nota_fiscal(self, payload):
     try:
         url = f'{self.base_url}/nfe'
@@ -2053,6 +2108,7 @@ def criar_nota_fiscal(self, payload):
     except requests.exceptions.RequestException as e:
         return {'erro': f'Erro ao comunicar com a API: {str(e)}'}
 
+@login_required   
 def correcao_nota(request):
     if request.method == 'POST':
         # Obter dados do formulário ou preparar o payload
@@ -2066,27 +2122,30 @@ def correcao_nota(request):
 
     return render(request, 'correcao_nota.html')
 
-# View para baixar o PDF da nota fiscal
-def baixar_pdf(request, nota_id):
-    plugnotas = NotasService()
-    response = plugnotas.baixar_pdf(nota_id)
+@login_required   
+def baixar_pdf(request, nota_id = None):
+    if nota_id:
+        plugnotas = NotasService()
+        response = plugnotas.baixar_pdf(nota_id)
 
-    if response.status_code == 200:
-        # Retorna o PDF para o usuário
-        pdf_content = response.content
-        return HttpResponse(pdf_content, content_type='application/pdf')
-    else:
-        raise Http404("PDF não encontrado ou erro ao processar a requisição.")
+        if response.status_code == 200:
+            # Retorna o PDF para o usuário
+            pdf_content = response.content
+            return HttpResponse(pdf_content, content_type='application/pdf')
+        else:
+            raise Http404("PDF não encontrado ou erro ao processar a requisição.")
+    return render(request, 'baixar_pdf.html')
 
+@login_required   
+def baixar_xml(request, nota_id = None):
+    if nota_id:
+        plugnotas = NotasService()
+        response = plugnotas.baixar_xml(nota_id)
 
-# View para baixar o XML da nota fiscal
-def baixar_xml(request, nota_id):
-    plugnotas = NotasService()
-    response = plugnotas.baixar_xml(nota_id)
-
-    if response.status_code == 200:
-        # Retorna o XML para o usuário
-        xml_content = response.content
-        return HttpResponse(xml_content, content_type='application/xml')
-    else:
-        raise Http404("XML não encontrado ou erro ao processar a requisição.")
+        if response.status_code == 200:
+            # Retorna o XML para o usuário
+            xml_content = response.content
+            return HttpResponse(xml_content, content_type='application/xml')
+        else:
+            raise Http404("XML não encontrado ou erro ao processar a requisição.")
+    return render(request, 'baixar_xml.html')

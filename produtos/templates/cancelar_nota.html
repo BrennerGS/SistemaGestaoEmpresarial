@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emitir Nota Fiscal</title>
-</head>
-<body>
+{% extends 'base_teste.html' %}
+
+{% block content %}
+
+
     <h1>Cancelar Nota Fiscal</h1>
 
     <form method="post" action="{% url 'cancelar_nota' %}">
@@ -19,5 +16,5 @@
 
         <button type="submit">Confirmar</button>
     </form>
-</body>
-</html>
+
+{% endblock %}
